@@ -88,8 +88,9 @@ function unsubmarine(nProvided) {
       nProvided ||
       prompt(
         "How many emails to loop through? (This also " +
-        "roughly equates to the number of browser " +
-        "tabs this script will open)", 25
+          "roughly equates to the number of browser " +
+          "tabs this script will open)",
+        25
       );
     n = parseInt(n, 10);
     if (!Number.isInteger(n))
