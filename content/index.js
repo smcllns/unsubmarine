@@ -1,5 +1,9 @@
-import test from "./mod.js";
+import unsubmarine from "./unsubmarine.js";
+
 export default () => {
-  console.log("hurrah index");
-  console.log("test", test());
+  chrome.runtime.onMessage.addListener((req) => {
+    if (req.message === "clicked_browser_action") {
+      unsubmarine();
+    }
+  });
 };
