@@ -1,9 +1,11 @@
-import unsubmarine from "./unsubmarine.js";
+(async () => {
+  const src = chrome.extension.getURL("content/unsubmarine.js");
+  const unsubmarine = await import(src);
 
-export default () => {
-  chrome.runtime.onMessage.addListener((req) => {
+  chrome.runtime.onMessage.addListener(async (req, sender, sendRes) => {
     if (req.message === "clicked_browser_action") {
-      unsubmarine();
+      const results = await unsubmarine.default();
+      sendRes(results);
     }
   });
-};
+})();
