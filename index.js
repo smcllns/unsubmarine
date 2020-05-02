@@ -1,3 +1,5 @@
+alert("Hello from your Chrome extension!");
+
 function unsubmarine(nProvided) {
   // All let bc pasting const into console can only be done once
   let i,
@@ -164,3 +166,5 @@ function unsubmarine(nProvided) {
     run();
   })(nProvided);
 }
+
+unsubmarine();

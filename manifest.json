@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+  "name": "Unsubmarine",
+  "version": "0.1",
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["index.js"]
+    }
+  ],
+  "browser_action": {
+    "default_icon": "icon-unsubmarine.png"
+  }
+}
