@@ -20,9 +20,7 @@ class Unsubmarine {
     this.n = 0;
     this.results = {
       scraped: [],
-      actioned: [],
-      toActionMap: new WeakMap(),
-      toActionArr: [],
+      actionable: [],
     };
   }
 
@@ -69,9 +67,7 @@ class Unsubmarine {
     this.results.scraped.push(m);
 
     if (m.unsubLink) {
-      if (!this.results.toActionMap.has(m.unsubLink))
-        this.results.toActionArr.push(m);
-      this.results.toActionMap.set(m, m.unsubLink);
+      this.results.actionable.push(m);
     }
 
     if (m.nextBtn) {
@@ -82,7 +78,7 @@ class Unsubmarine {
     const analyticsObj = {
       i: this.i,
       n: this.n,
-      a: this.results.toActionArr.length,
+      a: this.results.actionable.length,
       m: m,
     };
     console.log("tick", analyticsObj);
