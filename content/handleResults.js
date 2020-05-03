@@ -8,11 +8,26 @@ export default function handleResults(results, debugObj, resolve) {
 function renderDom(results, debug, resolve) {
   mount(document.body, resultsContainer);
   const okBtn = okButton(results);
+  const btns = html(
+    "div",
+    {
+      style: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "rgba(255,255,255,0.2)",
+        padding: "1rem",
+      },
+    },
+    closeButton,
+    okBtn
+  );
   setChildren(resultsContainer, [
     resultsHeader(results),
     resultsTable(results),
-    closeButton,
-    okBtn,
+    btns,
+    // closeButton,
+    // okBtn,
     cssStyles,
   ]);
   closeButton.addEventListener("click", (e) => {
@@ -50,12 +65,12 @@ const resultsContainer = html("div.unsubmarine.results", {
     borderRadius: "1rem 1rem 0 0",
   },
 });
-const closeButton = html("button", "Cancel");
+const closeButton = html("button.mx-05", "Cancel");
 const okButton = (results) => {
   return html(
-    "button",
+    "button.mx-05",
     `Click `,
-    html("span.live.selectedCount", results.actionable.length || "0"),
+    html("span.live.selectedCount", results.actionable.length),
     ` unsubscribe links`
   );
 };
@@ -189,6 +204,9 @@ const cssStyles = html(
 }
 .unsubmarine .whitespace-pre {
   white-space: pre;
+}
+.unsubmarine .mx-05 {
+  margin: 0 0.5rem 0 0.5rem;
 }
 `
 );
