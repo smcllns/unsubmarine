@@ -8,11 +8,12 @@ import {
 import handleResults from "./handleResults.js";
 
 class Unsubmarine {
-  constructor() {
+  constructor(resolve) {
     this.i = 0;
     this.n = 0;
     this.delay = 1000;
     this.results = {};
+    this.resolve = resolve;
   }
 
   reset() {
@@ -42,11 +43,15 @@ class Unsubmarine {
     this.run();
   }
 
-  run(prevM) {
+  async run(prevM) {
     if (this.i >= this.n) {
-      return handleResults(this.results, {
-        msg: "i >= n",
-      });
+      return handleResults(
+        this.results,
+        {
+          msg: "i >= n",
+        },
+        this.resolve
+      );
     }
 
     if (isListView()) {
@@ -60,9 +65,13 @@ class Unsubmarine {
     let m = scrapeMessageMeta();
 
     if (m?.url === prevM?.url)
-      return handleResults(this.results, {
-        msg: "same url",
-      });
+      return handleResults(
+        this.results,
+        {
+          msg: "same url",
+        },
+        this.resolve
+      );
 
     this.results.scraped.push(m);
 
@@ -92,8 +101,8 @@ class Unsubmarine {
 export default function exec() {
   console.log("running unsubmarine");
   return new Promise((resolve, reject) => {
-    const unsub = new Unsubmarine();
+    const unsub = new Unsubmarine(resolve);
     const results = unsub.start();
-    resolve(results);
+    // resolve(results);
   });
 }
