@@ -9,11 +9,12 @@
     }
   ],
   "background": {
-    "scripts": ["background/index.js", "hot-reload.js"]
+    "scripts": ["background/index.js", "lib/hot-reload.js"]
   },
   "web_accessible_resources": [
     "background/*.js",
     "content/*.js",
+    "lib/*js",
     "images/*.png"
   ],
   "browser_action": {

@@ -1,0 +1,10 @@
+{
+  "name": "unsubmarine",
+  "version": "0.1",
+  "description": "Hacking an auto-unsubscribe into gmail",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smcllns/unsubmarine.git"
+  }
+}
