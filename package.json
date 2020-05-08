@@ -1,10 +1,22 @@
 {
   "name": "unsubmarine",
-  "version": "0.1",
   "description": "Hacking an auto-unsubscribe into gmail",
-  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/smcllns/unsubmarine.git"
-  }
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "11.0.2",
+    "@rollup/plugin-node-resolve": "^7.0.0",
+    "crx-hotreload": "^1.0.4",
+    "rollup": "^1.20.0",
+    "rollup-plugin-svelte": "^5.0.3",
+    "rollup-plugin-terser": "^5.1.2",
+    "svelte": "^3.0.0"
+  },
+  "dependencies": {}
 }

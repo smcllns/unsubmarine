@@ -5,16 +5,18 @@
   "content_scripts": [
     {
       "matches": ["https://mail.google.com/*"],
-      "js": ["content/index.js"]
+      "js": ["content/index.js", "content/bundle.js"],
+      "css": ["content/bundle.css"]
     }
   ],
   "background": {
-    "scripts": ["background/index.js", "lib/hot-reload.js"]
+    "scripts": ["background/index.js", "background/hot-reload.js"]
   },
   "web_accessible_resources": [
     "background/*.js",
     "content/*.js",
-    "lib/*js",
+    "content/*.css",
+    "content/*.map",
     "images/*.png"
   ],
   "browser_action": {
