@@ -1,5 +1,6 @@
 import svelte from "rollup-plugin-svelte";
 import resolve from "@rollup/plugin-node-resolve";
+import babel from "@rollup/plugin-babel";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
 
@@ -14,8 +15,18 @@ export default {
     format: "iife",
     name: "app",
     file: outputDir + "content/bundle.js",
+    globals: {
+      "@babel/runtime/regenerator": "regeneratorRuntime",
+    },
   },
   plugins: [
+    babel({
+      presets: ["@babel/env"],
+      babelHelpers: "runtime",
+      babelrc: false,
+      plugins: [["@babel/transform-runtime"]],
+      exclude: "node_modules/**",
+    }),
     svelte({
       // enable run-time checks when not in production
       dev: !production,

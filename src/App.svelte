@@ -1,6 +1,11 @@
 <script>
-  let name = "world!";
   console.log("running svelte app");
+  import Unsub from "./unsubmarine";
+  let name = "world!";
+  const handleClick = (e) => {
+    const unsub = new Unsub();
+    console.log("unsub", unsub);
+  };
 </script>
 
 <style>
@@ -16,4 +21,7 @@
   }
 </style>
 
-<h1 id="test-el">Hello {name}!</h1>
+<div id="test-el">
+  <h1>Hello {name}!</h1>
+  <button on:click|preventDefault="{handleClick}">Trigger Unsub()</button>
+</div>
