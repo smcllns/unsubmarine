@@ -1178,70 +1178,15 @@ var app = (function () {
       };
     }
 
-    // import { html, mount, unmount, setChildren } from "../lib/redom.es.min.js";
-    function handleResults(results, debugObj, resolve) {
-      consoleDump(results, debugObj); // renderDom(results, debugObj, resolve);
-    } // function renderDom(results, debug, resolve) {
-
-    function consoleDump(results, debug) {
-      var _results$actionable;
-
-      console.log("Debug:", debug, results);
-      console.group("".concat(results.actionable.length, " Results To Action:"));
-      (_results$actionable = results.actionable) === null || _results$actionable === void 0 ? void 0 : _results$actionable.map(function (r) {
-        var _r$sender;
-
-        return console.log("".concat(r.when, " - ").concat((_r$sender = r.sender) === null || _r$sender === void 0 ? void 0 : _r$sender.replace(/[\<\>]/g, ""), " - ").concat(r.subject, ": ").concat(r.unsubLink));
-      });
-      console.groupEnd();
-    } // const cssStyles = html(
-    //   "style",
-    //   `
-    // .unsubmarine {
-    //   background: rgb(219,68,55);
-    //   color: rgba(255,255,255,0.9);
-    // }
-    // .unsubmarine a {
-    //   color: rgba(255,255,255,0.9);
-    //   text-decoration: none;
-    // }
-    // .unsubmarine thead td {
-    //   padding-bottom: 1rem;
-    // }
-    // .unsubmarine tbody tr {
-    //   background: rgba(255,255,255,0.1);
-    // }
-    // .unsubmarine td {
-    //   padding: 1rem;
-    //   position: relative;
-    // }
-    // .unsubmarine .text-center {
-    //   text-align: center;
-    // }
-    // .unsubmarine .text-bold {
-    //   font-weight: bold;
-    // }
-    // .unsubmarine .pb-1 {
-    //   padding-bottom: 1rem;
-    // }
-    // .unsubmarine .whitespace-pre {
-    //   white-space: pre;
-    // }
-    // .unsubmarine .mx-05 {
-    //   margin: 0 0.5rem 0 0.5rem;
-    // }
-    // `
-    // );
-
     var Unsubmarine = /*#__PURE__*/function () {
-      function Unsubmarine(resolve) {
+      function Unsubmarine() {
         classCallCheck(this, Unsubmarine);
 
         this.i = 0;
         this.n = 0;
         this.delay = 1000;
         this.results = {};
-        this.resolve = resolve;
+        this.resolve = undefined;
       }
 
       createClass(Unsubmarine, [{
@@ -1255,85 +1200,106 @@ var app = (function () {
           };
         }
       }, {
+        key: "createResultObj",
+        value: function createResultObj(debugMsg) {
+          return {
+            results: this.results,
+            debug: {
+              msg: debugMsg,
+              i: this.i,
+              n: this.n
+            }
+          };
+        }
+      }, {
         key: "start",
         value: function start() {
-          this.reset();
-          var n = prompt("How many emails to loop through? (This also " + "roughly equates to the number of browser " + "tabs this script will open)", 25);
-          var nInt = parseInt(n, 10);
+          var _this = this;
 
-          if (!Number.isInteger(nInt)) {
-            alert("Number must be an integer greater than zero..");
-            this.n = 0;
-          } else {
-            this.n = nInt;
-          }
+          return new Promise(function (resolve, reject) {
+            _this.reset();
 
-          this.run();
+            var n = prompt("How many emails to loop through? (This also " + "roughly equates to the number of browser " + "tabs this script will open)", 25);
+            var nInt = parseInt(n, 10);
+
+            if (!Number.isInteger(nInt) || nInt < 1) {
+              alert("Number must be an integer greater than zero");
+
+              var results = _this.createResultObj("n < 1");
+
+              return resolve(results);
+            }
+
+            _this.n = nInt;
+            _this.resolve = resolve;
+
+            _this.run();
+          });
         }
       }, {
         key: "run",
         value: function () {
           var _run = asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee(prevM) {
-            var _this = this;
+            var _this2 = this;
 
-            var l, m, analyticsObj;
+            var l, m, results, _results;
+
             return regenerator.wrap(function _callee$(_context) {
               while (1) {
                 switch (_context.prev = _context.next) {
                   case 0:
-                    if (!(this.i >= this.n)) {
-                      _context.next = 2;
+                    if (!isListView()) {
+                      _context.next = 4;
                       break;
                     }
 
-                    return _context.abrupt("return", handleResults(this.results, {
-                      msg: "i >= n"
-                    }, this.resolve));
+                    l = scrapeListMeta();
+                    l.firstItem.click();
+                    return _context.abrupt("return", setTimeout(function () {
+                      _this2.run();
+                    }, this.delay * 5));
 
-                  case 2:
-                    if (isListView()) {
-                      l = scrapeListMeta();
-                      l.firstItem.click();
-                      setTimeout(function () {
-                        _this.run();
-                      }, this.delay * 5);
-                    }
-
+                  case 4:
                     m = scrapeMessageMeta();
 
                     if (!((m === null || m === void 0 ? void 0 : m.url) === (prevM === null || prevM === void 0 ? void 0 : prevM.url))) {
-                      _context.next = 6;
+                      _context.next = 8;
                       break;
                     }
 
-                    return _context.abrupt("return", handleResults(this.results, {
-                      msg: "same url"
-                    }, this.resolve));
+                    results = this.createResultObj("same url");
+                    return _context.abrupt("return", this.resolve(results));
 
-                  case 6:
+                  case 8:
                     this.results.scraped.push(m);
 
                     if (m.unsubLink) {
                       this.results.actionable.push(m);
                     }
 
-                    if (m.nextBtn) {
-                      m.nextBtn.click();
-                      this.i = this.i + 1;
-                    }
-
-                    analyticsObj = {
+                    console.log("tick", {
                       i: this.i,
                       n: this.n,
                       a: this.results.actionable.length,
                       m: m
-                    };
-                    console.log("tick", analyticsObj);
+                    });
+
+                    if (!(this.i >= this.n - 1)) {
+                      _context.next = 16;
+                      break;
+                    }
+
+                    _results = this.createResultObj("n === i");
+                    return _context.abrupt("return", this.resolve(_results));
+
+                  case 16:
+                    this.i = this.i + 1;
+                    m.nextBtn.click();
                     setTimeout(function () {
-                      _this.run(m);
+                      _this2.run(m);
                     }, this.delay);
 
-                  case 12:
+                  case 19:
                   case "end":
                     return _context.stop();
                 }
@@ -1350,7 +1316,20 @@ var app = (function () {
       }]);
 
       return Unsubmarine;
-    }(); // export default function exec() {
+    }();
+
+    function consoleDump(results, debug) {
+      var _results$actionable;
+
+      console.log("Debug:", debug, results);
+      console.group("".concat(results.actionable.length, " Results To Action:"));
+      (_results$actionable = results.actionable) === null || _results$actionable === void 0 ? void 0 : _results$actionable.map(function (r) {
+        var _r$sender;
+
+        return console.log("".concat(r.when, " - ").concat((_r$sender = r.sender) === null || _r$sender === void 0 ? void 0 : _r$sender.replace(/[\<\>]/g, ""), " - ").concat(r.subject, ": ").concat(r.unsubLink));
+      });
+      console.groupEnd();
+    }
 
     /* src/App.svelte generated by Svelte v3.22.2 */
 
@@ -1360,7 +1339,7 @@ var app = (function () {
     function create_fragment(ctx) {
     	let div;
     	let h1;
-    	let t3;
+    	let t1;
     	let button;
     	let dispose;
 
@@ -1368,15 +1347,15 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			h1 = element("h1");
-    			h1.textContent = `Hello ${/*name*/ ctx[0]}!`;
-    			t3 = space();
+    			h1.textContent = "Hello world!";
+    			t1 = space();
     			button = element("button");
     			button.textContent = "Trigger Unsub()";
-    			add_location(h1, file, 24, 2, 414);
-    			add_location(button, file, 25, 2, 439);
+    			add_location(h1, file, 39, 2, 898);
+    			add_location(button, file, 40, 2, 922);
     			attr_dev(div, "id", "test-el");
     			attr_dev(div, "class", "svelte-rvq1uc");
-    			add_location(div, file, 23, 0, 393);
+    			add_location(div, file, 38, 0, 877);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1384,10 +1363,10 @@ var app = (function () {
     		m: function mount(target, anchor, remount) {
     			insert_dev(target, div, anchor);
     			append_dev(div, h1);
-    			append_dev(div, t3);
+    			append_dev(div, t1);
     			append_dev(div, button);
     			if (remount) dispose();
-    			dispose = listen_dev(button, "click", prevent_default(/*handleClick*/ ctx[1]), false, true, false);
+    			dispose = listen_dev(button, "click", prevent_default(/*handleStart*/ ctx[0]), false, true, false);
     		},
     		p: noop,
     		i: noop,
@@ -1411,12 +1390,25 @@ var app = (function () {
 
     function instance($$self, $$props, $$invalidate) {
     	console.log("running svelte app");
-    	let name = "world!";
+    	const unsub = new Unsubmarine();
 
-    	const handleClick = e => {
-    		const unsub = new Unsubmarine();
-    		console.log("unsub", unsub);
+    	const handleStart = async e => {
+    		console.log("starting submarine");
+    		const run = await unsub.start();
+    		const urls = run.results.actionable.map(i => i.unsubLink);
+    		consoleDump(run.results);
+
+    		urls.length > 0
+    		? chrome.runtime.sendMessage({ message: "open_new_tabs", urls })
+    		: console.log("no actionable results to open");
     	};
+
+    	chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
+    		if (req.message === "clicked_browser_action") {
+    			handleStart();
+    			return true;
+    		}
+    	});
 
     	const writable_props = [];
 
@@ -1426,17 +1418,8 @@ var app = (function () {
 
     	let { $$slots = {}, $$scope } = $$props;
     	validate_slots("App", $$slots, []);
-    	$$self.$capture_state = () => ({ Unsub: Unsubmarine, name, handleClick });
-
-    	$$self.$inject_state = $$props => {
-    		if ("name" in $$props) $$invalidate(0, name = $$props.name);
-    	};
-
-    	if ($$props && "$$inject" in $$props) {
-    		$$self.$inject_state($$props.$$inject);
-    	}
-
-    	return [name, handleClick];
+    	$$self.$capture_state = () => ({ Unsub: Unsubmarine, consoleDump, unsub, handleStart });
+    	return [handleStart];
     }
 
     class App extends SvelteComponentDev {

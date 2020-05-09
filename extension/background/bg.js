@@ -1,5 +1,3 @@
-console.log("hi from bg page!");
-
 chrome.browserAction.onClicked.addListener(function (tab) {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     var activeTab = tabs[0];
@@ -9,11 +7,10 @@ chrome.browserAction.onClicked.addListener(function (tab) {
   });
 });
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.message === "open_new_tabs") {
     for (const url of request.urls) {
-      console.log("got open tab instruction...", url);
-      chrome.tabs.create({ url: url });
+      chrome.tabs.create({ url });
     }
   }
 });

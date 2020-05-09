@@ -5,12 +5,12 @@
   "content_scripts": [
     {
       "matches": ["https://mail.google.com/*"],
-      "js": ["content/index.js", "content/bundle.js"],
+      "js": ["content/bundle.js"],
       "css": ["content/bundle.css"]
     }
   ],
   "background": {
-    "scripts": ["background/index.js", "background/hot-reload.js"]
+    "scripts": ["background/bg.js", "background/hot-reload.js"]
   },
   "web_accessible_resources": [
     "background/*.js",

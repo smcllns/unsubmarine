@@ -9,7 +9,7 @@ const production = !process.env.ROLLUP_WATCH;
 const outputDir = "extension/";
 
 export default {
-  input: "src/main.js",
+  input: "src/index.js",
   output: {
     sourcemap: true,
     format: "iife",
