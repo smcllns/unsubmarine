@@ -25,7 +25,8 @@
 
 <style>
   #test-el {
-    background: yellow;
+    background: #d63447;
+    color: #fff;
     position: absolute;
     top: 0;
     left: 0;
