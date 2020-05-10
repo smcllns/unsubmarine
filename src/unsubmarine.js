@@ -7,92 +7,64 @@ import {
 
 export default class Unsubmarine {
   constructor() {
-    this.i = 0;
-    this.n = 0;
     this.delay = 1000;
-    this.results = {};
-    this.resolve = undefined;
+    this.lastRun = {};
   }
 
-  reset() {
-    this.i = 0;
-    this.n = 0;
-    this.results = {
-      scraped: [],
-      actionable: [],
-    };
-  }
+  async *start() {
+    let i = 0;
+    const nGiven = prompt(
+      "How many emails to loop through? (This also " +
+        "roughly equates to the number of browser " +
+        "tabs this script will open)",
+      25,
+    );
+    const n = parseInt(nGiven, 10);
+    if (!Number.isInteger(n) || n < 1) {
+      alert("Number must be an integer greater than zero");
+      return { error: true, msg: "n < 1", i, n: -1 };
+    }
 
-  createResultObj(debugMsg) {
-    return {
-      results: this.results,
-      debug: {
-        msg: debugMsg,
-        i: this.i,
-        n: this.n,
-      },
-    };
-  }
+    yield { i, n, error: false };
 
-  start() {
-    return new Promise((resolve, reject) => {
-      this.reset();
-      const n = prompt(
-        "How many emails to loop through? (This also " +
-          "roughly equates to the number of browser " +
-          "tabs this script will open)",
-        25,
-      );
-      const nInt = parseInt(n, 10);
-      if (!Number.isInteger(nInt) || nInt < 1) {
-        alert("Number must be an integer greater than zero");
-        const results = this.createResultObj("n < 1");
-        return resolve(results);
+    while (true) {
+      const result = await this.run();
+      this.lastRun = result;
+      if (i >= n - 1 || result.error) {
+        return { ...result, n, i };
       }
-      this.n = nInt;
-      this.resolve = resolve;
-      this.run();
-    });
+      if (!result.skipIncrement) {
+        yield { ...result, n, i };
+        i++;
+      }
+    }
   }
 
-  async run(prevM) {
-    if (isListView()) {
-      let l = scrapeListMeta();
-      l.firstItem.click();
-      return setTimeout(() => {
-        this.run();
-      }, this.delay * 5);
-    }
+  async run() {
+    return new Promise((resolve, reject) => {
+      if (isListView()) {
+        let l = scrapeListMeta();
+        l.firstItem.click();
+        setTimeout(() => {
+          resolve({ error: false, skipIncrement: true });
+        }, this.delay * 3);
+      }
 
-    let m = scrapeMessageMeta();
+      let m = scrapeMessageMeta();
+      console.log(m.url, this.lastRun?.m?.url, this.lastRun?.m);
+      if (m.url === this.lastRun?.m?.url) {
+        resolve({
+          error: true,
+          msg: "same url",
+          m,
+        });
+      }
 
-    if (m?.url === prevM?.url) {
-      const results = this.createResultObj("same url");
-      return this.resolve(results);
-    }
+      if (m.nextBtn) m.nextBtn.click();
 
-    this.results.scraped.push(m);
-
-    if (m.unsubLink) {
-      this.results.actionable.push(m);
-    }
-
-    console.log("tick", {
-      i: this.i,
-      n: this.n,
-      a: this.results.actionable.length,
-      m: m,
-    });
-
-    if (this.i >= this.n - 1) {
-      const results = this.createResultObj("n === i");
-      return this.resolve(results);
-    } else {
-      this.i = this.i + 1;
-      m.nextBtn.click();
       setTimeout(() => {
-        this.run(m);
+        resolve({ error: false, m });
       }, this.delay);
-    }
+    });
   }
 }

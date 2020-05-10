@@ -21,15 +21,21 @@ const timestampForFilesInDirectory = (dir) =>
   );
 
 const reload = () => {
-  chrome.tabs.query({ active: true, currentWindow: false }, (tabs) => {
+  chrome.tabs.query({ active: true, windowType: "normal" }, (tabs) => {
     // NB: see https://github.com/xpl/crx-hotreload/issues/5
     if (tabs[0]) {
       chrome.tabs.reload(tabs[0].id);
       chrome.runtime.reload();
-    } else {
-      console.log("no tabs found..", tabs);
+      // } else {
+      // console.log("no tabs found...", tabs);
+      // chrome.tabs.query(
+      //   { windowId: chrome.windows.WINDOW_ID_CURRENT },
+      //   (tabs) => {
+      //     console.log("maybe tabs here?", tabs);
+      //   },
+      // );
     }
-    // chrome.runtime.reload();
+    chrome.runtime.reload();
   });
 };
 
