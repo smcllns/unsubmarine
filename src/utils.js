@@ -14,8 +14,8 @@ const dedupe = (results) => {
 
 function consoleDump(results, debug) {
   console.log(`Debug:`, debug, results);
-  console.group(`${results.actionable.length} Results To Action:`);
-  results.actionable?.map((r) =>
+  console.group(`${results.length} Results To Action:`);
+  results?.map((r) =>
     console.log(
       `${r.when} - ${r.sender?.replace(/[\<\>]/g, "")} - ${r.subject}: ${
         r.unsubLink

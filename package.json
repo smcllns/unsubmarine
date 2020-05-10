@@ -13,15 +13,21 @@
     "@babel/core": "^7.9.6",
     "@babel/plugin-transform-runtime": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
+    "@fullhuman/postcss-purgecss": "^2.2.0",
     "@rollup/plugin-babel": "^5.0.0",
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "crx-hotreload": "^1.0.4",
+    "postcss": "^7.0.29",
+    "postcss-load-config": "^2.1.0",
     "prettier": "^2.0.5",
+    "prettier-plugin-svelte": "^1.1.0",
     "rollup": "^1.20.0",
     "rollup-plugin-svelte": "^5.0.3",
     "rollup-plugin-terser": "^5.1.2",
-    "svelte": "^3.0.0"
+    "svelte": "^3.0.0",
+    "svelte-preprocess": "^3.7.4",
+    "tailwindcss": "^1.4.6"
   },
   "dependencies": {
     "@babel/runtime": "^7.9.6"

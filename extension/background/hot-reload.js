@@ -26,16 +26,8 @@ const reload = () => {
     if (tabs[0]) {
       chrome.tabs.reload(tabs[0].id);
       chrome.runtime.reload();
-      // } else {
-      // console.log("no tabs found...", tabs);
-      // chrome.tabs.query(
-      //   { windowId: chrome.windows.WINDOW_ID_CURRENT },
-      //   (tabs) => {
-      //     console.log("maybe tabs here?", tabs);
-      //   },
-      // );
     }
-    chrome.runtime.reload();
+    // chrome.runtime.reload();
   });
 };
 
