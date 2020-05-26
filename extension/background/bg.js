@@ -1,4 +1,4 @@
-console.log("pg page running");
+console.log("bg page running");
 
 chrome.browserAction.onClicked.addListener(function (tab) {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {

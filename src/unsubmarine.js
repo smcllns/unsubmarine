@@ -25,6 +25,7 @@ export default class Unsubmarine {
     if (!Number.isInteger(n) || n < 1) {
       alert("Number must be an integer greater than zero");
       return { error: true, msg: "n < 1", i, n: -1 };
+      // returning from generator will return done: true
     }
 
     while (true) {
