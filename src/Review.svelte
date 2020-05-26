@@ -1,5 +1,5 @@
 <script>
-  export let actionableResults, currentViewState;
+  export let actionableResults, quit;
 
   function handleLaunchUrl(url) {
     chrome.runtime.sendMessage({ message: "open_new_tab", url });
@@ -12,7 +12,7 @@
           urls: actionableResults.map(i => i.m.unsubLink)
         })
       : console.log("no actionable results to open");
-    currentViewState = false;
+    quit();
   }
 </script>
 

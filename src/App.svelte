@@ -11,9 +11,20 @@
     n = 0,
     i = 0;
 
+  function handleShortcutKeys(e) {
+    if (e.key === "Escape") quit();
+  }
+
+  function quit() {
+    currentViewState = false;
+    document.removeEventListener("keyup", handleShortcutKeys);
+  }
+
   chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     if (req.message === "clicked_browser_action") {
       currentViewState = viewStates[0];
+      document.removeEventListener("keyup", handleShortcutKeys);
+      document.addEventListener("keyup", handleShortcutKeys);
       return true;
     }
   });
@@ -49,7 +60,7 @@
   {/if}
 
   {#if currentViewState === viewStates[2]}
-    <Review {actionableResults} bind:currentViewState />
+    <Review {actionableResults} {quit} />
   {/if}
 </div>
 
