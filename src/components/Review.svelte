@@ -26,6 +26,9 @@
       class="bg-green-800 px-4 my-4 rounded-sm">
       OK
     </button>
+    <button on:click|preventDefault={quit} class="px-4 my-4 rounded-sm">
+      Cancel
+    </button>
     <ul>
       {#each actionableResults as { m }}
         <li>

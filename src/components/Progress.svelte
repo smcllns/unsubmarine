@@ -1,6 +1,14 @@
 <script>
   import Unsub from "../lib/unsubmarine";
-  export let n, i, viewStates, currentViewState, actionableResults;
+
+  export let n,
+    i,
+    viewStates,
+    currentViewState,
+    actionableResults,
+    killSwitch,
+    quit;
+
   (async () => {
     actionableResults = await getResults(n);
     currentViewState = viewStates[2];
@@ -29,7 +37,7 @@
           _results = [..._results, { m, error }];
           actionableResults = _results;
         }
-        inProcess = !done;
+        inProcess = !done && !killSwitch;
         // generator returns {done:true} when complete and {done:false} for each yield
       }
       resolve(_results);
@@ -37,13 +45,25 @@
   }
 </script>
 
+<style>
+  .ProgressTab {
+    background: tomato;
+  }
+</style>
+
 <div
   id="unsubmarine-progress"
   class="flex flex-1 flex-col-reverse pointer-events-none">
   <div
-    class="flex flex-col items-center justify-center bg-green-600 text-white
-    py-4 mx-4 rounded-t-lg pointer-events-auto">
-    <h1>Unsubmarine {i}/{n}</h1>
-    <h2>Actionable: {actionableResults.length}</h2>
+    class="flex justify-between text-white py-4 mx-4 rounded-t-lg
+    pointer-events-auto ProgressTab">
+    <h2 class="px-4">Unsubscribe Links Found: {actionableResults.length}</h2>
+    <h1 class="px-4">Progress: {i}/{n}</h1>
+    <button
+      class="px-4"
+      on:click|preventDefault={e => (killSwitch = !killSwitch)}>
+      Finish
+    </button>
+    <button class="px-4" on:click|preventDefault={quit()}>Cancel</button>
   </div>
 </div>
