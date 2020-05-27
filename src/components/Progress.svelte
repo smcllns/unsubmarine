@@ -1,5 +1,5 @@
 <script>
-  import Unsub from "./unsubmarine";
+  import Unsub from "../lib/unsubmarine";
   export let n, i, viewStates, currentViewState, actionableResults;
   (async () => {
     actionableResults = await getResults(n);

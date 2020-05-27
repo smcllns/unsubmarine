@@ -1,5 +1,6 @@
 <script>
   export let n, currentViewState, viewStates;
+  const initFocus = el => el.focus();
 </script>
 
 <div
@@ -14,7 +15,7 @@
       bind:value={n}
       placeholder={10}
       class="mx-4 text-black text-center w-12 rounded-sm"
-      autofocus />
+      use:initFocus />
     <button
       on:click|preventDefault={e => (currentViewState = viewStates[1])}
       class="bg-green-600 px-4 rounded-sm">

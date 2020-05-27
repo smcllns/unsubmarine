@@ -14,9 +14,7 @@
   },
   "web_accessible_resources": [
     "background/*.js",
-    "content/*.js",
-    "content/*.css",
-    "content/*.map",
+    "content/bundle.*",
     "images/*.png"
   ],
   "browser_action": {

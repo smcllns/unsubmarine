@@ -1,8 +1,8 @@
 <script>
-  import Tailwindcss from "./Tailwindcss.svelte";
   import Start from "./Start.svelte";
   import Review from "./Review.svelte";
   import Progress from "./Progress.svelte";
+  import Tailwindcss from "../lib/Tailwindcss.svelte";
 
   const viewStates = ["ask", "progress", "review"];
 
