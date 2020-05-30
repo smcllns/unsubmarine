@@ -14,19 +14,19 @@
     }
   });
 
+  function reset() {
+    currentViewState = false;
+    actionableResults = [];
+    n = 100;
+    i = 0;
+    killSwitch = false;
+  }
+
   function start() {
     reset();
     currentViewState = viewStates[0];
     document.removeEventListener("keyup", handleShortcutKeys);
     document.addEventListener("keyup", handleShortcutKeys);
-  }
-
-  function reset() {
-    (currentViewState = false),
-      (actionableResults = []),
-      (n = 100),
-      (i = 0),
-      (killSwitch = false);
   }
 
   function quit() {
@@ -40,9 +40,9 @@
   }
 </script>
 
-<div id="unsubmarine" class="pointer-events-none">
+<div id="unsubmarine">
   {#if currentViewState === viewStates[0]}
-    <Start bind:n bind:currentViewState {viewStates} />
+    <Start bind:currentViewState {viewStates} {quit} />
   {/if}
 
   {#if currentViewState === viewStates[1]}
@@ -75,5 +75,6 @@
     z-index: 999;
     display: flex;
     flex: 1;
+    pointer-events: none;
   }
 </style>

@@ -1,36 +1,17 @@
 <script>
-  export let n, currentViewState, viewStates;
-  const initFocus = el => el.focus();
+  export let currentViewState, viewStates, quit;
+  import Dialog from "./Dialog.svelte";
 </script>
 
-<div
-  id="unsubmarine-ask"
-  class="flex flex-1 flex-col-reverse pointer-events-none items-center
-  justify-center Dialog__Container">
+<Dialog {quit}>
+  <header class="pb-8 px-8 text-center">
+    <h1 class="text-3xl font-bold">Welcome to Unsubmarine</h1>
+    <p>A miniature adventure in making some automated tools for gmail.</p>
+  </header>
   <div
-    class="flex flex-col justify-center bg-black text-white px-12 py-6
-    rounded-lg pointer-events-auto Dialog">
-    <h1>Start Unsubmarine?</h1>
-    <input
-      type="number"
-      bind:value={n}
-      placeholder={100}
-      class="text-black text-center px-2 rounded-sm mt-2"
-      use:initFocus />
-    <button
-      on:click|preventDefault={e => (currentViewState = viewStates[1])}
-      class="bg-green-600 px-4 rounded-sm mt-2">
-      Start
-    </button>
+    class="Btn Secondary"
+    on:click|preventDefault={e => (currentViewState = viewStates[1])}>
+    <h3 class="text-lg font-semibold">Advanced mode</h3>
+    <p>Run on the list of emails in current view</p>
   </div>
-</div>
-
-<style>
-  .Dialog__Container {
-    background: rgba(0, 0, 0, 0.8);
-  }
-  .Dialog {
-    background: tomato;
-    min-height: 10rem;
-  }
-</style>
+</Dialog>

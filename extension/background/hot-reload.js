@@ -7,28 +7,31 @@ const filesInDirectory = (dir) =>
           .map((e) =>
             e.isDirectory
               ? filesInDirectory(e)
-              : new Promise((resolve) => e.file(resolve)),
-          ),
+              : new Promise((resolve) => e.file(resolve))
+          )
       )
         .then((files) => [].concat(...files))
-        .then(resolve),
-    ),
+        .then(resolve)
+    )
   );
 
 const timestampForFilesInDirectory = (dir) =>
   filesInDirectory(dir).then((files) =>
-    files.map((f) => f.name + f.lastModifiedDate).join(),
+    files.map((f) => f.name + f.lastModifiedDate).join()
   );
 
 const reload = () => {
-  chrome.tabs.query({ active: true, windowType: "normal" }, (tabs) => {
-    // NB: see https://github.com/xpl/crx-hotreload/issues/5
-    if (tabs[0]) {
-      chrome.tabs.reload(tabs[0].id);
-      chrome.runtime.reload();
+  // NB: see https://github.com/xpl/crx-hotreload/issues/5
+  chrome.tabs.query(
+    { active: true, windowType: "normal", lastFocusedWindow: true },
+    (tabs) => {
+      console.log("tabs", tabs);
+      if (tabs[0]) {
+        chrome.tabs.reload(tabs[0].id);
+        chrome.runtime.reload();
+      }
     }
-    // chrome.runtime.reload();
-  });
+  );
 };
 
 const watchChanges = (dir, lastTimestamp) => {
