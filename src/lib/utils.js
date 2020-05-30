@@ -1,4 +1,3 @@
-const prettyEmail = (str = "") => str.replace(/[<>]/g, "");
 const prettyTimestamp = (str = "") =>
   /\((.*)\)/.test(str) ? str.match(/\((.*)\)/)[1] : "";
 
@@ -19,10 +18,10 @@ function consoleDump(results, debug) {
     console.log(
       `${r.when} - ${r.sender?.replace(/[\<\>]/g, "")} - ${r.subject}: ${
         r.unsubLink
-      }`,
-    ),
+      }`
+    )
   );
   console.groupEnd();
 }
 
-export { consoleDump, dedupe, prettyEmail, prettyTimestamp };
+export { consoleDump, dedupe, prettyTimestamp };

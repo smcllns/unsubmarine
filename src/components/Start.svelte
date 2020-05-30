@@ -1,6 +1,6 @@
 <script>
-  export let moveToNextView;
   import Dialog from "./Dialog.svelte";
+  export let moveToNextView;
 </script>
 
 <Dialog {moveToNextView}>

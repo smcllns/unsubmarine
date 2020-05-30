@@ -37,7 +37,7 @@
 
   function moveToNextView(quitFlag) {
     // Handle Quit
-    if (quitFlag === true) quit();
+    if (quitFlag === true) return quit();
     // Handle Start
     if (!currentViewState) return (currentViewState = viewStates[0]);
     // Handle Finish
@@ -63,7 +63,7 @@
   {/if}
 
   {#if currentViewState === viewStates[2]}
-    <Review {actionableResults} {quit} />
+    <Review {actionableResults} {moveToNextView} />
   {/if}
 </div>
 

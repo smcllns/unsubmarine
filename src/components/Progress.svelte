@@ -1,6 +1,5 @@
 <script>
   import Unsub from "../lib/unsubmarine";
-
   export let i, actionableResults, killSwitch, moveToNextView;
 
   (async () => {
