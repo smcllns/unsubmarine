@@ -3,10 +3,12 @@
 
   .Btn {
     text-align: center;
-    padding: 1rem 2rem;
+    font-weight: bold;
+    padding: 0.25rem 1.5rem;
     cursor: pointer;
     opacity: 0.95;
     position: relative;
+    border-radius: 2px;
   }
   .Btn:hover {
     opacity: 1;

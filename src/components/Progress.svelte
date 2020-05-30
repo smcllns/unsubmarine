@@ -1,25 +1,19 @@
 <script>
   import Unsub from "../lib/unsubmarine";
 
-  export let n,
-    i,
-    viewStates,
-    currentViewState,
-    actionableResults,
-    killSwitch,
-    quit;
+  export let i, actionableResults, killSwitch, moveToNextView;
 
   (async () => {
-    await getResults(n);
-    currentViewState = viewStates[2];
+    await getResults();
+    moveToNextView();
   })();
 
-  function getResults(n) {
+  function getResults() {
     return new Promise(async (resolve, reject) => {
       let _results = [];
 
       const unsub = new Unsub();
-      const scraper = unsub.start(n);
+      const scraper = unsub.start();
 
       let inProcess = true;
       i = 1; // updates UI ahead of first scrape
@@ -46,24 +40,33 @@
 </script>
 
 <div
-  id="unsubmarine-progress"
-  class="flex flex-1 flex-col-reverse pointer-events-none">
+  class="ProgressTab__Container flex flex-1 flex-col-reverse pointer-events-none">
   <div
-    class="flex justify-between text-white py-4 mx-4 rounded-t-lg
-    pointer-events-auto ProgressTab">
-    <h2 class="px-4">Unsubscribe Links Found: {actionableResults.length}</h2>
-    <h1 class="px-4">Progress: {i}/{n}</h1>
-    <button
-      class="px-4"
+    class="ProgressTab flex justify-between items-center p-4 mx-8 rounded-t-lg
+    bg-black text-white pointer-events-auto">
+    <span
+      class="Btn Tertiary"
+      on:click|preventDefault={e => moveToNextView(true)}>
+      Cancel
+    </span>
+    <div class="text-center text-sm">
+      <p class="font-bold">Searching for unsubscribe links...</p>
+      <p>
+        {i} email searched; {actionableResults.length} unsubscribe links found
+      </p>
+    </div>
+    <span
+      class="Btn Primary"
       on:click|preventDefault={e => (killSwitch = !killSwitch)}>
       Finish
-    </button>
-    <button class="px-4" on:click|preventDefault={quit()}>Cancel</button>
+    </span>
   </div>
 </div>
 
 <style>
   .ProgressTab {
-    background: tomato;
+  }
+  .Btn.Tertiary {
+    color: #fff;
   }
 </style>

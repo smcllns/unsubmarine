@@ -24,15 +24,28 @@
 
   function start() {
     reset();
-    currentViewState = viewStates[0];
     document.removeEventListener("keyup", handleShortcutKeys);
     document.addEventListener("keyup", handleShortcutKeys);
+    moveToNextView();
   }
 
   function quit() {
     currentViewState = false;
     killSwitch = true;
     document.removeEventListener("keyup", handleShortcutKeys);
+  }
+
+  function moveToNextView(quitFlag) {
+    // Handle Quit
+    if (quitFlag === true) quit();
+    // Handle Start
+    if (!currentViewState) return (currentViewState = viewStates[0]);
+    // Handle Finish
+    if (currentViewState === viewStates[viewStates.length - 1])
+      return (currentViewState = false);
+    // Handle Next Step
+    return (currentViewState =
+      viewStates[viewStates.indexOf(currentViewState) + 1]);
   }
 
   function handleShortcutKeys(e) {
@@ -42,18 +55,11 @@
 
 <div id="unsubmarine">
   {#if currentViewState === viewStates[0]}
-    <Start bind:currentViewState {viewStates} {quit} />
+    <Start {moveToNextView} />
   {/if}
 
   {#if currentViewState === viewStates[1]}
-    <Progress
-      bind:n
-      bind:i
-      bind:actionableResults
-      bind:currentViewState
-      bind:killSwitch
-      {viewStates}
-      {quit} />
+    <Progress bind:i bind:actionableResults bind:killSwitch {moveToNextView} />
   {/if}
 
   {#if currentViewState === viewStates[2]}

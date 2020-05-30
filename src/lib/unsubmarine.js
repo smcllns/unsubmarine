@@ -9,35 +9,22 @@ export default class Unsubmarine {
   constructor() {
     this.delay = 1000;
     this.prevRun;
+    this.unsubLimit = 5;
+    this.unsubCount;
   }
 
-  async *start(nGiven) {
+  async *start() {
     let i = 0;
-    nGiven =
-      nGiven ||
-      prompt(
-        "How many emails to loop through? (This also " +
-          "roughly equates to the number of browser " +
-          "tabs this script will open)",
-        10,
-      );
-    const n = parseInt(nGiven, 10);
-    if (!Number.isInteger(n) || n < 1) {
-      alert("Number must be an integer greater than zero");
-      return { error: true, msg: "n < 1", i, n: -1 };
-      // returning from generator will return done: true
-    }
+    this.unsubCount = 0;
 
     while (true) {
       const result = await this.run();
-      this.prevRun = result;
-      if (i >= n - 1 || result.error) {
-        return { ...result, n, i };
-        // returning from generator will return done: true
+      if (result.error || this.unsubCount >= this.unsubLimit) {
+        return { ...result, i };
       }
       if (!result.skipIncrement) {
-        yield { ...result, n, i };
-        // yielding from generator will return done: true
+        yield { ...result, i };
+        this.prevRun = result;
         i++;
       }
     }
@@ -63,6 +50,7 @@ export default class Unsubmarine {
         });
       }
 
+      if (m.unsubLink) this.unsubCount++;
       if (m.nextBtn) m.nextBtn.click();
 
       setTimeout(() => {

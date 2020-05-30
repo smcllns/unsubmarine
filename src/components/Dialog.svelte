@@ -1,5 +1,5 @@
 <script>
-  export let quit;
+  export let moveToNextView;
 </script>
 
 <div
@@ -8,7 +8,11 @@
   <div
     class="Dialog flex flex-col justify-center py-12 px-16 m-4 bg-white
     text-black rounded-lg pointer-events-auto relative">
-    <span on:click|preventDefault={quit} class="Dialog__Close">&#x2716;</span>
+    <span
+      on:click|preventDefault={e => moveToNextView(true)}
+      class="Dialog__Close">
+      &#x2716;
+    </span>
 
     <slot />
   </div>
@@ -18,7 +22,12 @@
   .Dialog {
   }
   .Dialog__Container {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgb(0, 0, 0);
+    background: radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.95) 100%
+    );
   }
   .Dialog__Close {
     position: absolute;
