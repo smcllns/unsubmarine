@@ -3,16 +3,6 @@
   const initFocus = el => el.focus();
 </script>
 
-<style>
-  .Dialog__Container {
-    background: rgba(0, 0, 0, 0.8);
-  }
-  .Dialog {
-    background: tomato;
-    min-height: 10rem;
-  }
-</style>
-
 <div
   id="unsubmarine-ask"
   class="flex flex-1 flex-col-reverse pointer-events-none items-center
@@ -34,3 +24,13 @@
     </button>
   </div>
 </div>
+
+<style>
+  .Dialog__Container {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  .Dialog {
+    background: tomato;
+    min-height: 10rem;
+  }
+</style>

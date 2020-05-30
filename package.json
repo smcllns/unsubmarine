@@ -5,6 +5,9 @@
     "type": "git",
     "url": "git+https://github.com/smcllns/unsubmarine.git"
   },
+  "prettier": {
+    "svelteSortOrder": "scripts-markup-styles"
+  },
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w"

@@ -10,7 +10,7 @@
     quit;
 
   (async () => {
-    actionableResults = await getResults(n);
+    await getResults(n);
     currentViewState = viewStates[2];
   })();
 
@@ -35,8 +35,8 @@
 
         if (m && m.unsubLink && !error) {
           _results = [..._results, { m, error }];
-          actionableResults = _results;
         }
+        actionableResults = _results;
         inProcess = !done && !killSwitch;
         // generator returns {done:true} when complete and {done:false} for each yield
       }
@@ -44,12 +44,6 @@
     });
   }
 </script>
-
-<style>
-  .ProgressTab {
-    background: tomato;
-  }
-</style>
 
 <div
   id="unsubmarine-progress"
@@ -67,3 +61,9 @@
     <button class="px-4" on:click|preventDefault={quit()}>Cancel</button>
   </div>
 </div>
+
+<style>
+  .ProgressTab {
+    background: tomato;
+  }
+</style>

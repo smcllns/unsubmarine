@@ -5,16 +5,7 @@
   import Tailwindcss from "../lib/Tailwindcss.svelte";
 
   const viewStates = ["ask", "progress", "review"];
-
   let currentViewState, actionableResults, n, i, killSwitch;
-
-  function reset() {
-    (currentViewState = false),
-      (actionableResults = []),
-      (n = 100),
-      (i = 0),
-      (killSwitch = false);
-  }
 
   chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     if (req.message === "clicked_browser_action") {
@@ -30,6 +21,14 @@
     document.addEventListener("keyup", handleShortcutKeys);
   }
 
+  function reset() {
+    (currentViewState = false),
+      (actionableResults = []),
+      (n = 100),
+      (i = 0),
+      (killSwitch = false);
+  }
+
   function quit() {
     currentViewState = false;
     killSwitch = true;
@@ -41,28 +40,12 @@
   }
 </script>
 
-<style>
-  #unsubmarine {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: 0;
-    padding: 0;
-    z-index: 999;
-    display: flex;
-    flex: 1;
-  }
-</style>
-
 <div id="unsubmarine" class="pointer-events-none">
-  <!-- {#if currentViewState === viewStates[0]}
-    <Start bind:n bind:currentViewState {viewStates} />
-  {/if} -->
-
   {#if currentViewState === viewStates[0]}
-    <!-- {#if currentViewState === viewStates[1]} -->
+    <Start bind:n bind:currentViewState {viewStates} />
+  {/if}
+
+  {#if currentViewState === viewStates[1]}
     <Progress
       bind:n
       bind:i
@@ -79,3 +62,18 @@
 </div>
 
 <Tailwindcss />
+
+<style>
+  #unsubmarine {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    z-index: 999;
+    display: flex;
+    flex: 1;
+  }
+</style>
