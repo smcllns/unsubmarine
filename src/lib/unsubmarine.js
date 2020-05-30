@@ -6,27 +6,23 @@ import {
 } from "./scraper.js";
 
 export default class Unsubmarine {
-  constructor() {
-    this.delay = 1000;
+  constructor(limit = 5) {
+    this.delay = 1000; // TODO: detect DOM changes, not timer
+    this.unsubLimit = limit;
+    this.unsubCount = 0;
     this.prevRun;
-    this.unsubLimit = 5;
-    this.unsubCount;
   }
 
   async *start() {
-    let i = 0;
-    this.unsubCount = 0;
-
     while (true) {
       const result = await this.run();
       if (result.error || this.unsubCount >= this.unsubLimit) {
-        return { ...result, i };
+        return result;
       }
-      if (!result.skipIncrement) {
-        yield { ...result, i };
-        this.prevRun = result;
-        i++;
-      }
+      if (result.skipIncrement) continue;
+
+      this.prevRun = result;
+      yield result;
     }
   }
 
@@ -41,8 +37,8 @@ export default class Unsubmarine {
       }
 
       let m = scrapeMessageMeta();
-      console.log(m.url, this.prevRun?.m?.url, this.prevRun?.m);
       if (m.url === this.prevRun?.m?.url) {
+        // KP: scrape seems to have failed and m has new url but other fields are old
         resolve({
           error: true,
           msg: "same url",

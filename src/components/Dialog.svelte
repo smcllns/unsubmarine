@@ -9,10 +9,7 @@
     class="Dialog flex flex-col justify-center py-12 px-16 m-4 bg-white
     text-black rounded-lg pointer-events-auto relative">
     <span
-      on:click|preventDefault={e => {
-        console.log('click');
-        moveToNextView(true);
-      }}
+      on:click|preventDefault={e => moveToNextView(true)}
       class="Dialog__Close">
       &#x2716;
     </span>

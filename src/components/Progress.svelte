@@ -2,40 +2,36 @@
   import Unsub from "../lib/unsubmarine";
   export let i, actionableResults, killSwitch, moveToNextView;
 
+  const limit = 3;
+
   (async () => {
-    await getResults();
+    const unsub = new Unsub(limit);
+    const scraper = unsub.start();
+    let inProcess = true;
+
+    actionableResults = [];
+    i = 1; // update UI for first msg
+
+    while (inProcess) {
+      const { done, value } = await scraper.next();
+      const { m, error } = value;
+      i = i + 1; // explicit assignment to trigger svelte reactivity
+
+      if (m && m.unsubLink && !error) {
+        // optional chaining not supported in .svelte
+        // due to ordering of svelte vs babel parsing in rollup
+        // which I've just spent enough time on and am leaving for now
+        // https://github.com/rollup/plugins/tree/master/packages/babel
+
+        actionableResults = [...actionableResults, { m, error }];
+        // explicit assignment to trigger svelte reactivity
+      }
+      inProcess = !done && !killSwitch;
+      // generators return {done:true} on return
+      // and {done:false} on yield
+    }
     moveToNextView();
   })();
-
-  function getResults() {
-    return new Promise(async (resolve, reject) => {
-      let _results = [];
-
-      const unsub = new Unsub();
-      const scraper = unsub.start();
-
-      let inProcess = true;
-      i = 1; // updates UI ahead of first scrape
-
-      while (inProcess) {
-        const {
-          done,
-          value: { m, error, ...res }
-        } = await scraper.next();
-
-        // assigning explicitly bc destructuring doesn't trigger svelte reactivity
-        i = res.i + 1;
-
-        if (m && m.unsubLink && !error) {
-          _results = [..._results, { m, error }];
-        }
-        actionableResults = _results;
-        inProcess = !done && !killSwitch;
-        // generator returns {done:true} when complete and {done:false} for each yield
-      }
-      resolve(_results);
-    });
-  }
 </script>
 
 <div

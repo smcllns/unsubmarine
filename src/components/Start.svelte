@@ -13,3 +13,6 @@
     <p class="font-normal">Run on the list of emails in current view</p>
   </div>
 </Dialog>
+
+<!-- document.querySelector('[name=q]') -->
+<!-- window.location.hash = '#search/unsubscribe' -->
