@@ -24,4 +24,15 @@ function consoleDump(results, debug) {
   console.groupEnd();
 }
 
-export { consoleDump, dedupe, prettyTimestamp };
+function simulateTyping(input, string) {
+  return new Promise((resolve, reject) => {
+    string.split("").forEach((char, index) => {
+      setTimeout(() => {
+        input.value = string.slice(0, index + 1);
+        if (index === string.length - 1) resolve();
+      }, 200 * index + 100 * Math.random());
+    });
+  });
+}
+
+export { consoleDump, dedupe, prettyTimestamp, simulateTyping };

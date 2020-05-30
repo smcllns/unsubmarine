@@ -5,7 +5,7 @@
 
   const resultsGroupedBySender = actionableResults.reduce((acc, item) => {
     const { sender, subject, when, unsubLink, url } = item.m;
-    const key = sender.replace(/[@\.]/g, "");
+    const key = sender && sender.replace(/[@\.]/g, "");
     if (!acc[key]) acc[key] = [];
     acc[key] = [...acc[key], { sender, subject, when, unsubLink, url }];
     return acc;
@@ -29,7 +29,7 @@
           urls: selectedResults.map(r => r[0].unsubLink)
         })
       : console.log("no actionable results to open");
-    moveToNextView(true);
+    moveToNextView("exit");
   }
 
   function handleCheckboxChange(i) {
@@ -40,11 +40,10 @@
   }
 </script>
 
-<Dialog {moveToNextView}>
-  <header class="pb-8 px-8 text-center">
-    <h1 class="text-3xl font-bold">Confirm Unsubscribes</h1>
-    <p>Select which emails to unsubscribe from</p>
-  </header>
+<Dialog
+  {moveToNextView}
+  title="Confirm Unsubscribes"
+  subtitle="Select which emails to unsubscribe from">
 
   <table>
     <thead>
@@ -93,7 +92,7 @@
 
   <div class="flex justify-between items center pt-8">
     <button
-      on:click|preventDefault={e => moveToNextView(true)}
+      on:click|preventDefault={e => moveToNextView('exit')}
       class="Btn Tertiary">
       Cancel
     </button>
@@ -104,6 +103,7 @@
       Unsubscribe ({selectedResults.length})
     </button>
   </div>
+
 </Dialog>
 
 <style>

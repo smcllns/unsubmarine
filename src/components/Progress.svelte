@@ -1,20 +1,27 @@
 <script>
+  import { afterUpdate } from "svelte";
   import Unsub from "../lib/unsubmarine";
-  export let i, actionableResults, killSwitch, moveToNextView;
+  export let i, actionableResults, killSwitch, moveToNextView, active;
 
   const limit = 3;
+  const unsub = new Unsub(limit);
 
-  (async () => {
-    const unsub = new Unsub(limit);
+  $: {
+    if (active) unsubRun();
+    unsub.killSwitch = killSwitch;
+  }
+
+  const unsubRun = async () => {
     const scraper = unsub.start();
-    let inProcess = true;
 
     actionableResults = [];
     i = 1; // update UI for first msg
 
+    let inProcess = true;
     while (inProcess) {
       const { done, value } = await scraper.next();
       const { m, error } = value;
+
       i = i + 1; // explicit assignment to trigger svelte reactivity
 
       if (m && m.unsubLink && !error) {
@@ -26,41 +33,42 @@
         actionableResults = [...actionableResults, { m, error }];
         // explicit assignment to trigger svelte reactivity
       }
-      inProcess = !done && !killSwitch;
+      inProcess = !done;
       // generators return {done:true} on return
       // and {done:false} on yield
     }
-    moveToNextView();
-  })();
+    if (!killSwitch) moveToNextView(2);
+  };
 </script>
 
-<div
-  class="ProgressTab__Container flex flex-1 flex-col-reverse pointer-events-none">
-  <div
-    class="ProgressTab flex justify-between items-center p-4 mx-8 rounded-t-lg
-    bg-black text-white pointer-events-auto">
-    <span
-      class="Btn Tertiary"
-      on:click|preventDefault={e => moveToNextView(true)}>
-      Cancel
-    </span>
-    <div class="text-center text-sm">
-      <p class="font-bold">Searching for unsubscribe links...</p>
-      <p>
-        {i} email searched; {actionableResults.length} unsubscribe links found
-      </p>
+{#if active}
+
+  <div class="flex flex-1 flex-col-reverse pointer-events-none">
+    <div
+      class="flex justify-between items-center p-4 mx-8 rounded-t-lg bg-black
+      text-white pointer-events-auto">
+      <span
+        class="Btn Tertiary"
+        on:click|preventDefault={e => moveToNextView('exit')}>
+        Cancel
+      </span>
+      <div class="text-center text-sm">
+        <p class="font-bold">Searching for unsubscribe links...</p>
+        <p>
+          {i} email searched; {actionableResults.length} unsubscribe links found
+        </p>
+      </div>
+      <span
+        class="Btn Primary"
+        on:click|preventDefault={e => (killSwitch = true)}>
+        Finish
+      </span>
     </div>
-    <span
-      class="Btn Primary"
-      on:click|preventDefault={e => (killSwitch = !killSwitch)}>
-      Finish
-    </span>
   </div>
-</div>
+
+{/if}
 
 <style>
-  .ProgressTab {
-  }
   .Btn.Tertiary {
     color: #fff;
   }

@@ -5,6 +5,9 @@
     color: blue;
     text-decoration: underline;
   }
+  .font-tomato {
+    color: tomato;
+  }
 
   .Btn {
     text-align: center;

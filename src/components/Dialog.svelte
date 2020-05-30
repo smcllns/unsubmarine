@@ -1,5 +1,5 @@
 <script>
-  export let moveToNextView;
+  export let title, subtitle, moveToNextView;
 </script>
 
 <div
@@ -9,12 +9,18 @@
     class="Dialog flex flex-col justify-center py-12 px-16 m-4 bg-white
     text-black rounded-lg pointer-events-auto relative">
     <span
-      on:click|preventDefault={e => moveToNextView(true)}
+      on:click|preventDefault={e => moveToNextView('exit')}
       class="Dialog__Close">
       &#x2716;
     </span>
 
+    <header class="pb-8 px-8 text-center">
+      <h1 class="text-3xl font-bold">{title}</h1>
+      <p>{subtitle}</p>
+    </header>
+
     <slot />
+
   </div>
 </div>
 

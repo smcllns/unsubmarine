@@ -4,7 +4,7 @@
   import Progress from "./Progress.svelte";
   import Tailwindcss from "../lib/Tailwindcss.svelte";
 
-  const viewStates = ["ask", "progress", "review"];
+  const viewStates = ["start", "progress", "review"];
   let currentViewState, actionableResults, n, i, killSwitch;
 
   chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
@@ -15,41 +15,35 @@
   });
 
   function reset() {
-    currentViewState = false;
-    actionableResults = [];
-    n = 100;
-    i = 0;
     killSwitch = false;
+    actionableResults = [];
+    currentViewState = false;
+    document.removeEventListener("keyup", handleShortcutKeys);
+    document.addEventListener("keyup", handleShortcutKeys);
+  }
+
+  function exit() {
+    killSwitch = true;
+    currentViewState = false;
+    document.removeEventListener("keyup", handleShortcutKeys);
   }
 
   function start() {
     reset();
-    document.removeEventListener("keyup", handleShortcutKeys);
-    document.addEventListener("keyup", handleShortcutKeys);
-    moveToNextView();
-  }
-
-  function quit() {
-    currentViewState = false;
-    killSwitch = true;
-    document.removeEventListener("keyup", handleShortcutKeys);
-  }
-
-  function moveToNextView(quitFlag) {
-    // Handle Quit
-    if (quitFlag === true) return quit();
-    // Handle Start
-    if (!currentViewState) return (currentViewState = viewStates[0]);
-    // Handle Finish
-    if (currentViewState === viewStates[viewStates.length - 1])
-      return (currentViewState = false);
-    // Handle Next Step
-    return (currentViewState =
-      viewStates[viewStates.indexOf(currentViewState) + 1]);
+    moveToNextView(0);
   }
 
   function handleShortcutKeys(e) {
-    if (e.key === "Escape") quit();
+    if (e.key === "Escape") exit();
+  }
+
+  function moveToNextView(flag) {
+    // Handle Quit
+    if (flag === "exit") return exit();
+
+    // Handle Explicit View
+    if (flag === false) return (currentViewState = false);
+    if (Number.isInteger(flag)) return (currentViewState = viewStates[flag]);
   }
 </script>
 
@@ -58,9 +52,12 @@
     <Start {moveToNextView} />
   {/if}
 
-  {#if currentViewState === viewStates[1]}
-    <Progress bind:i bind:actionableResults bind:killSwitch {moveToNextView} />
-  {/if}
+  <Progress
+    bind:actionableResults
+    {killSwitch}
+    {moveToNextView}
+    active={currentViewState === viewStates[1]} />
+  <!-- Needed to use active this way instead of wrapping in conditional bc otherwise the code couldn't get the killSwitch update -->
 
   {#if currentViewState === viewStates[2]}
     <Review {actionableResults} {moveToNextView} />
