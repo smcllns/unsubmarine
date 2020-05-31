@@ -25,8 +25,10 @@
     const parent = searchInput.closest("form");
     const defaultColor = parent.style.backgroundColor;
     parent.style.backgroundColor = "tomato";
+    parent.style.color = "white";
     await simulateTyping(searchInput, "unsubscribe");
     parent.style.backgroundColor = defaultColor;
+    parent.style.color = "inherit";
     window.location.hash = "#search/unsubscribe";
   }
 </script>
@@ -34,7 +36,7 @@
 <Dialog
   {moveToNextView}
   title="Welcome to Unsubmarine"
-  subtitle="An miniature adventure in automating inbox management.">
+  subtitle="Automating unsubscribe for gmail">
 
   <div class="max-w-lg">
     <div
@@ -48,9 +50,27 @@
       </p>
     </div>
 
-    <div class="Btn Secondary p-4" on:click|preventDefault={handleAdvancedMode}>
-      <h3 class="text-lg font-semibold">Advanced mode</h3>
+    <div
+      class="Btn Secondary p-4 mb-4"
+      on:click|preventDefault={handleAdvancedMode}>
+      <h3 class="text-lg font-semibold">Custom mode</h3>
       <p class="font-normal">Run on the message list in current view</p>
     </div>
+
+    <div
+      class="Btn Secondary p-4 mb-4"
+      on:click|preventDefault={e => alert('Coming soon!')}>
+      <h3 class="text-lg font-semibold">Buy full version ($1.99)</h3>
+      <p class="font-normal">
+        Increase search limit from 10 to 1000, set search options, and help me
+        understand how many people will pay for inbox automation :)
+      </p>
+    </div>
+
+    <p class="mb-4">
+      Read more about my thinking making automation for something as sensitive
+      as an inbox. (TLDR: Strictly no email data leaves your browser, but that
+      limits what features are possible.)
+    </p>
   </div>
 </Dialog>

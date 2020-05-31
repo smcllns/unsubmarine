@@ -6,7 +6,7 @@
   class="Dialog__Container flex flex-1 flex-col-reverse pointer-events-none
   items-center justify-center">
   <div
-    class="Dialog flex flex-col justify-center pt-8 pb-12 px-16 m-4 bg-white
+    class="Dialog flex flex-col justify-center py-8 px-16 m-4 bg-white
     text-black rounded-lg pointer-events-auto relative">
     <span
       on:click|preventDefault={e => moveToNextView(false)}

@@ -38,6 +38,13 @@
       return r;
     });
   }
+  function handleCheckedAllChange(e) {
+    const isChecked = e.target.checked;
+    displayedResults = displayedResults.map((r, index) => {
+      r.checked = isChecked;
+      return r;
+    });
+  }
 </script>
 
 <Dialog
@@ -46,9 +53,14 @@
   subtitle="Select which emails to unsubscribe from">
 
   <table>
-    <thead>
+    <thead class="font-bold">
       <tr>
-        <td />
+        <td class="text-center">
+          <input
+            type="checkbox"
+            checked={true}
+            on:change={handleCheckedAllChange} />
+        </td>
         <td>From</td>
         <td>#</td>
         <td>Messages</td>
@@ -57,8 +69,8 @@
     </thead>
     <tbody>
       {#each displayedResults as emailsBySender, i}
-        <tr>
-          <td>
+        <tr class="align-top hover:bg-gray-200">
+          <td class="text-center">
             <label for={`i-${i}`} class="px-2">
               <input
                 type="checkbox"
@@ -72,7 +84,7 @@
             <label for={`i-${i}`}>{emailsBySender[0].sender}</label>
           </td>
           <td>{emailsBySender.length}</td>
-          <td class="Results__SubjectCell">
+          <td class="Results__SubjectCell max-w-xs overflow-x-hidden">
             <label for={`i-${i}`}>
               {#each emailsBySender as email}
                 <a
@@ -112,23 +124,10 @@
 </Dialog>
 
 <style>
-  /* Keeping table styles here for now just to make table easier to read */
-  thead {
-    font-weight: bold;
-  }
-  tbody tr {
-    vertical-align: top;
-  }
   td {
-    padding: 0.25rem;
-    white-space: nowrap;
-  }
-  tbody tr:hover {
-    @apply bg-gray-200;
+    @apply whitespace-no-wrap p-1;
   }
   .Results__SubjectCell {
-    max-width: 20rem;
-    overflow-x: hidden;
     text-overflow: ellipsis;
   }
 </style>
