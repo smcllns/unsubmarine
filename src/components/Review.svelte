@@ -29,7 +29,7 @@
           urls: selectedResults.map(r => r[0].unsubLink)
         })
       : console.log("no actionable results to open");
-    moveToNextView("exit");
+    moveToNextView(false);
   }
 
   function handleCheckboxChange(i) {
@@ -50,7 +50,9 @@
       <tr>
         <td />
         <td>From</td>
+        <td>#</td>
         <td>Messages</td>
+        <td>When</td>
       </tr>
     </thead>
     <tbody>
@@ -67,14 +69,12 @@
             </label>
           </td>
           <td>
-            <label for={`i-${i}`}>
-              {emailsBySender[0].sender} ({emailsBySender.length})
-            </label>
+            <label for={`i-${i}`}>{emailsBySender[0].sender}</label>
           </td>
+          <td>{emailsBySender.length}</td>
           <td class="Results__SubjectCell">
             <label for={`i-${i}`}>
               {#each emailsBySender as email}
-                {prettyTimestamp(email.when)}:
                 <a
                   href={email.url}
                   on:click|preventDefault={e => handleLaunchUrl(email.url)}>
@@ -84,7 +84,12 @@
               {/each}
             </label>
           </td>
-          <td />
+          <td>
+            {#each emailsBySender as email}
+              {prettyTimestamp(email.when)}
+              <br />
+            {/each}
+          </td>
         </tr>
       {/each}
     </tbody>
@@ -92,7 +97,7 @@
 
   <div class="flex justify-between items center pt-8">
     <button
-      on:click|preventDefault={e => moveToNextView('exit')}
+      on:click|preventDefault={e => moveToNextView(false)}
       class="Btn Tertiary">
       Cancel
     </button>
@@ -107,8 +112,12 @@
 </Dialog>
 
 <style>
+  /* Keeping table styles here for now just to make table easier to read */
   thead {
     font-weight: bold;
+  }
+  tbody tr {
+    vertical-align: top;
   }
   td {
     padding: 0.25rem;

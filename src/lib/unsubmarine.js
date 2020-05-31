@@ -10,23 +10,26 @@ export default class Unsubmarine {
     this.killSwitch = false;
     this.delay = 1000; // TODO: detect DOM changes, not timer
     this.unsubLimit = limit;
-    this.unsubCount = 0;
+    this.unsubCount;
     this.prevRun;
   }
 
   async *start() {
+    this.prevRun = undefined;
+    this.unsubCount = 0;
     while (true) {
-      if (this.killSwitch) return false;
+      if (this.killSwitch) return { log: "stop" };
 
       const result = await this.run();
-      if (result.error) return result;
+      if (result.error) return { ...result, log: "error" };
+      if (result.stop) return { ...result, log: "stop" };
       if (result.skipIncrement) continue;
 
       if (this.unsubCount >= this.unsubLimit) {
-        return result;
+        return { ...result, log: "completed" };
       } else {
         this.prevRun = result;
-        yield result;
+        yield { ...result, log: "yield" };
       }
     }
   }
@@ -37,13 +40,12 @@ export default class Unsubmarine {
         let l = scrapeListMeta();
         l.firstItem.click();
         return setTimeout(() => {
-          if (this.killSwitch) resolve({ error: true });
+          if (this.killSwitch) resolve({ error: false, stop: true });
           resolve({ error: false, skipIncrement: true });
         }, this.delay * 3);
       }
 
       let m = scrapeMessageMeta();
-      console.log("m", m, this.prevRun);
       if (m.url === this.prevRun?.m?.url) {
         // KP: scrape seems to have failed and m has new url but other fields are old
         resolve({
@@ -57,7 +59,7 @@ export default class Unsubmarine {
       if (m.nextBtn) m.nextBtn.click();
 
       return setTimeout(() => {
-        if (this.killSwitch) resolve({ error: true });
+        if (this.killSwitch) resolve({ error: false, stop: true });
         resolve({ error: false, m });
       }, this.delay);
     });

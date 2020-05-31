@@ -2,35 +2,53 @@
   import Start from "./Start.svelte";
   import Review from "./Review.svelte";
   import Progress from "./Progress.svelte";
+  import Unsubmarine from "./Unsubmarine.svelte";
   import Tailwindcss from "../lib/Tailwindcss.svelte";
 
+  let currentViewState, actionableResults, killSwitch, i, running;
   const viewStates = ["start", "progress", "review"];
-  let currentViewState, actionableResults, n, i, killSwitch;
 
   chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
-    if (req.message === "clicked_browser_action") {
+    if (req.message === "clicked_browser_extension_icon") {
       start();
-      return true;
+      // return true;
+      // // return true when using sendResponse async instead of sync
+      // // https://developer.chrome.com/extensions/messaging
     }
   });
 
+  function start() {
+    reset();
+    moveToNextView(0);
+  }
+
   function reset() {
     killSwitch = false;
+    i = 0;
+    running = false;
     actionableResults = [];
     currentViewState = false;
     document.removeEventListener("keyup", handleShortcutKeys);
     document.addEventListener("keyup", handleShortcutKeys);
   }
 
-  function exit() {
+  // A note on managing state through the components:
+  // Kill Switch controls the Unsubmarine scraper which is controlling gmail, and feels scary when you can't stop it immediately
+  // Changing/hiding UI layer is handled separately  with moveNextView
+
+  function stopAndCancel() {
     killSwitch = true;
-    currentViewState = false;
-    document.removeEventListener("keyup", handleShortcutKeys);
+    moveToNextView(false);
+    cleanup();
   }
 
-  function start() {
-    reset();
-    moveToNextView(0);
+  function stopAndReview() {
+    running = false;
+    moveToNextView(2);
+  }
+
+  function cleanup() {
+    document.removeEventListener("keyup", handleShortcutKeys);
   }
 
   function handleShortcutKeys(e) {
@@ -38,26 +56,29 @@
   }
 
   function moveToNextView(flag) {
-    // Handle Quit
-    if (flag === "exit") return exit();
-
-    // Handle Explicit View
     if (flag === false) return (currentViewState = false);
+    // hides all UI
     if (Number.isInteger(flag)) return (currentViewState = viewStates[flag]);
+    // go to specific UI state
   }
 </script>
 
 <div id="unsubmarine">
   {#if currentViewState === viewStates[0]}
-    <Start {moveToNextView} />
+    <Start {moveToNextView} bind:running />
   {/if}
 
-  <Progress
+  {#if currentViewState === viewStates[1]}
+    <Progress {actionableResults} {i} {stopAndCancel} {stopAndReview} />
+  {/if}
+
+  <Unsubmarine
     bind:actionableResults
+    bind:i
+    bind:running
     {killSwitch}
-    {moveToNextView}
-    active={currentViewState === viewStates[1]} />
-  <!-- Needed to use active this way instead of wrapping in conditional bc otherwise the code couldn't get the killSwitch update -->
+    {stopAndReview}
+    {stopAndCancel} />
 
   {#if currentViewState === viewStates[2]}
     <Review {actionableResults} {moveToNextView} />

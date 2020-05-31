@@ -6,15 +6,15 @@
   class="Dialog__Container flex flex-1 flex-col-reverse pointer-events-none
   items-center justify-center">
   <div
-    class="Dialog flex flex-col justify-center py-12 px-16 m-4 bg-white
+    class="Dialog flex flex-col justify-center pt-8 pb-12 px-16 m-4 bg-white
     text-black rounded-lg pointer-events-auto relative">
     <span
-      on:click|preventDefault={e => moveToNextView('exit')}
+      on:click|preventDefault={e => moveToNextView(false)}
       class="Dialog__Close">
       &#x2716;
     </span>
 
-    <header class="pb-8 px-8 text-center">
+    <header class="pb-12 mx-auto max-w-lg text-center">
       <h1 class="text-3xl font-bold">{title}</h1>
       <p>{subtitle}</p>
     </header>
@@ -26,13 +26,15 @@
 
 <style>
   .Dialog {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.12),
+      0 4px 4px rgba(0, 0, 0, 0.16), 0 8px 8px rgba(0, 0, 0, 0.2);
   }
   .Dialog__Container {
     background: rgb(0, 0, 0);
     background: radial-gradient(
       circle,
-      rgba(0, 0, 0, 0.7) 0%,
-      rgba(0, 0, 0, 0.95) 100%
+      rgba(0, 0, 0, 0.5) 33%,
+      rgba(0, 0, 0, 0.9) 100%
     );
   }
   .Dialog__Close {

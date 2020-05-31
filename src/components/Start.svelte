@@ -1,10 +1,26 @@
 <script>
   import Dialog from "./Dialog.svelte";
   import { simulateTyping } from "../lib/utils";
-  export let moveToNextView;
+  export let moveToNextView, running;
 
-  const handleStandardMode = async e => {
-    moveToNextView(false);
+  const delay = 1000;
+
+  const handleAdvancedMode = e => {
+    moveToNextView(1);
+    setTimeout(() => {
+      running = true;
+    }, delay * 1);
+  };
+
+  const handleStandardMode = e => {
+    moveToNextView(1);
+    navigateToSearchPageAnimatedly();
+    setTimeout(() => {
+      running = true;
+    }, delay * 3);
+  };
+
+  async function navigateToSearchPageAnimatedly() {
     const searchInput = document.querySelector("[name=q]");
     const parent = searchInput.closest("form");
     const defaultColor = parent.style.backgroundColor;
@@ -12,10 +28,7 @@
     await simulateTyping(searchInput, "unsubscribe");
     parent.style.backgroundColor = defaultColor;
     window.location.hash = "#search/unsubscribe";
-    setTimeout(() => {
-      moveToNextView(1);
-    }, 3000);
-  };
+  }
 </script>
 
 <Dialog
@@ -35,14 +48,9 @@
       </p>
     </div>
 
-    <div
-      class="Btn Secondary p-4"
-      on:click|preventDefault={e => moveToNextView(1)}>
+    <div class="Btn Secondary p-4" on:click|preventDefault={handleAdvancedMode}>
       <h3 class="text-lg font-semibold">Advanced mode</h3>
       <p class="font-normal">Run on the message list in current view</p>
     </div>
   </div>
 </Dialog>
-
-<!-- document.querySelector('[name=q]') -->
-<!-- window.location.hash = '#search/unsubscribe' -->

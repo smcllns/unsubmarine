@@ -40,7 +40,8 @@
   .Btn:active {
     top: 1px;
   }
-  .Btn.Secondary:hover {
+  .Btn.Secondary:hover,
+  .Btn.Tertiary:hover {
     @apply bg-gray-200;
   }
   .Btn.Primary:disabled {
