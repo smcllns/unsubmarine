@@ -7,7 +7,7 @@ import sveltePreprocess from "svelte-preprocess";
 
 const production = !process.env.ROLLUP_WATCH;
 
-const outputDir = "extension/";
+const outputDir = "extension/content/";
 
 export default {
   input: "src/index.js",
@@ -15,7 +15,7 @@ export default {
     sourcemap: true,
     format: "iife",
     name: "app",
-    file: outputDir + "content/bundle.js",
+    file: outputDir + "bundle.js",
     globals: {
       "@babel/runtime/regenerator": "regeneratorRuntime",
     },
@@ -34,7 +34,7 @@ export default {
       // we'll extract any component CSS out into
       // a separate file - better for performance
       css: (css) => {
-        css.write(outputDir + "content/bundle.css");
+        css.write(outputDir + "bundle.css");
       },
       preprocess: sveltePreprocess({ postcss: true }),
     }),
