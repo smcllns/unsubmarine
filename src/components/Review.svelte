@@ -4,7 +4,7 @@
   export let actionableResults, moveToNextView;
 
   const resultsGroupedBySender = actionableResults.reduce((acc, item) => {
-    const { sender, subject, when, unsubLink, url } = item.m;
+    const { sender, subject, when, unsubLink, url } = item;
     const key = sender && sender.replace(/[@\.]/g, "");
     if (!acc[key]) acc[key] = [];
     acc[key] = [...acc[key], { sender, subject, when, unsubLink, url }];

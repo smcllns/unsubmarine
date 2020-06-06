@@ -3,35 +3,28 @@
   import Review from "./Review.svelte";
   import Progress from "./Progress.svelte";
   import Unsubmarine from "./Unsubmarine.svelte";
-  import Tailwindcss from "../lib/Tailwindcss.svelte";
+  import Tailwindcss from "./Tailwindcss.svelte";
+
+  const unsubLimit = 5; // Todo: make a micropayment to extend
 
   let currentViewState = false,
     actionableResults = [],
     killSwitch = false,
     i = 0,
-    running = false,
     startUnsubmarine;
 
   const viewStates = ["start", "progress", "review"];
 
   chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     if (req.message === "clicked_browser_extension_icon") {
-      start();
-      // return true;
-      // // return true when using sendResponse async instead of sync
-      // // https://developer.chrome.com/extensions/messaging
+      reset();
+      moveToNextView(0);
     }
   });
-
-  function start() {
-    reset();
-    moveToNextView(0);
-  }
 
   function reset() {
     killSwitch = false;
     i = 0;
-    running = false;
     actionableResults = [];
     currentViewState = false;
     document.removeEventListener("keyup", handleShortcutKeys);
@@ -49,7 +42,7 @@
   }
 
   function stopAndReview() {
-    running = false;
+    killSwitch = true;
     moveToNextView(2);
   }
 
@@ -63,13 +56,22 @@
 
   function moveToNextView(flag) {
     if (flag === false) return (currentViewState = false);
-    // hides all UI
     if (Number.isInteger(flag)) return (currentViewState = viewStates[flag]);
     // go to specific UI state
   }
 </script>
 
 <div id="unsubmarine">
+
+  <Unsubmarine
+    bind:actionableResults
+    bind:i
+    bind:startUnsubmarine
+    {unsubLimit}
+    {killSwitch}
+    {stopAndReview}
+    {stopAndCancel} />
+
   {#if currentViewState === viewStates[0]}
     <Start {moveToNextView} {startUnsubmarine} />
   {/if}
@@ -77,15 +79,6 @@
   {#if currentViewState === viewStates[1]}
     <Progress {actionableResults} {i} {stopAndCancel} {stopAndReview} />
   {/if}
-
-  <Unsubmarine
-    bind:actionableResults
-    bind:i
-    bind:running
-    bind:startUnsubmarine
-    {killSwitch}
-    {stopAndReview}
-    {stopAndCancel} />
 
   {#if currentViewState === viewStates[2]}
     <Review {actionableResults} {moveToNextView} />

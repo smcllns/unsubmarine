@@ -4,13 +4,9 @@
   import { waitForGmailPageChangeOnce } from "../lib/observers";
   export let moveToNextView, startUnsubmarine;
 
-  const delay = 1000;
-
   const handleAdvancedMode = e => {
     moveToNextView(1);
-    setTimeout(() => {
-      startUnsubmarine();
-    }, 100);
+    startUnsubmarine();
   };
 
   const handleStandardMode = async e => {
@@ -28,12 +24,10 @@
     await simulateTyping(searchInput, "unsubscribe");
     parent.style.backgroundColor = defaultColor;
     parent.style.color = "inherit";
-    console.log("wait for search page load");
     if (window.location.hash !== "#search/unsubscribe") {
       window.location.hash = "#search/unsubscribe";
       await waitForGmailPageChangeOnce();
     }
-    console.log("search page loaded");
   }
 </script>
 

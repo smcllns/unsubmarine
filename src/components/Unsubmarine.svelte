@@ -2,66 +2,35 @@
   import Unsubmarine from "../lib/unsubmarine";
   export let actionableResults,
     killSwitch,
-    running,
     i,
     stopAndReview,
     stopAndCancel,
-    startUnsubmarine;
+    startUnsubmarine,
+    unsubLimit;
 
-  const limit = 10;
-  const unsubmarine = new Unsubmarine(limit);
+  const unsubmarine = new Unsubmarine(unsubLimit);
+
   $: {
-    console.log("$ CHANGE killswitch", killSwitch);
+    console.log("$ Change killswitch", killSwitch);
     unsubmarine.killSwitch = killSwitch;
-    // if (running) startUnsubmarine();
-    // if (!running) unsubmarine.killSwitch = true;
   }
 
   startUnsubmarine = async () => {
-    console.log("startUnsubmarine()");
-    const scraper = unsubmarine.start();
-
     actionableResults = [];
     i = 1; // update UI for first msg // doesn't work if navigating lists
-    running = true;
-    while (running) {
-      const { done, value } = await scraper.next();
-      const { m, error } = value;
-      console.log("await scrape", m);
+    for await (const result of unsubmarine.start()) {
+      console.log("value from unsub generator", result);
 
-      i = i + 1; // explicit assignment to trigger svelte reactivity
+      i = i + 1;
+      // explicit assignment to trigger svelte reactivity
 
-      if (m && m.unsubLink && !error) {
-        // optional chaining not supported in .svelte
-        // due to ordering of svelte vs babel parsing in rollup
-        // which I've just spent enough time on and am leaving for now
-        // https://github.com/rollup/plugins/tree/master/packages/babel
-
-        actionableResults = [...actionableResults, { m, error }];
-        // explicit assignment to trigger svelte reactivity
+      if (result.unsubLink && !result.error) {
+        actionableResults = [...actionableResults, result];
       }
-      running = !done;
-      // generators return {done:true} on return
-      // and {done:false} on yield
 
-      // console.log(
-      //   "done:",
-      //   done,
-      //   "value:",
-      //   value,
-      //   "running:",
-      //   running,
-      //   "i:",
-      //   i,
-      //   "killSwitch:",
-      //   killSwitch,
-      //   "unsubmarine.killSwitch:",
-      //   unsubmarine.killSwitch
-      // );
-
-      if (done) {
-        if (error) stopAndCancel();
-        else stopAndReview();
+      if (result.error) {
+        stopAndCancel();
+        break;
       }
     }
     stopAndReview();

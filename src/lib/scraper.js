@@ -49,9 +49,10 @@ function scrapeWindowMeta() {
   const possibleNextBtns = true
     ? document.querySelectorAll('[data-tooltip="Older"]')
     : document.querySelectorAll('[data-tooltip="Newer"]');
+  // Making a note of selectors, may want to go forward and backwards sometime
 
   const nextBtn = Array.from(possibleNextBtns).filter(
-    (node) => node.offsetParent
+    (node) => node.offsetParent && node.getAttribute("aria-disabled") !== "true"
   )[0];
 
   // On narrow viewport width, gmail can hide these buttons, in that case, choose the one furthest down the page (likely highest on UI layers?)
