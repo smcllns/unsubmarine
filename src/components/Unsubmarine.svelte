@@ -5,25 +5,29 @@
     running,
     i,
     stopAndReview,
-    stopAndCancel;
+    stopAndCancel,
+    startUnsubmarine;
 
   const limit = 10;
   const unsubmarine = new Unsubmarine(limit);
   $: {
+    console.log("$ CHANGE killswitch", killSwitch);
     unsubmarine.killSwitch = killSwitch;
-    if (running) startUnsubmarine();
-    if (!running) unsubmarine.killSwitch = true;
+    // if (running) startUnsubmarine();
+    // if (!running) unsubmarine.killSwitch = true;
   }
 
-  const startUnsubmarine = async () => {
+  startUnsubmarine = async () => {
+    console.log("startUnsubmarine()");
     const scraper = unsubmarine.start();
 
     actionableResults = [];
     i = 1; // update UI for first msg // doesn't work if navigating lists
-
+    running = true;
     while (running) {
       const { done, value } = await scraper.next();
       const { m, error } = value;
+      console.log("await scrape", m);
 
       i = i + 1; // explicit assignment to trigger svelte reactivity
 
@@ -39,20 +43,21 @@
       running = !done;
       // generators return {done:true} on return
       // and {done:false} on yield
-      console.log(
-        "done:",
-        done,
-        "value:",
-        value,
-        "running:",
-        running,
-        "i:",
-        i,
-        "killSwitch:",
-        killSwitch,
-        "unsubmarine.killSwitch:",
-        unsubmarine.killSwitch
-      );
+
+      // console.log(
+      //   "done:",
+      //   done,
+      //   "value:",
+      //   value,
+      //   "running:",
+      //   running,
+      //   "i:",
+      //   i,
+      //   "killSwitch:",
+      //   killSwitch,
+      //   "unsubmarine.killSwitch:",
+      //   unsubmarine.killSwitch
+      // );
 
       if (done) {
         if (error) stopAndCancel();

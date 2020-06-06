@@ -19,19 +19,19 @@ function isMessageView() {
 function scrapeListMeta() {
   // There is a visible 'listitem'
 
-  let possibleListItems = Array.from(
+  const possibleListItems = Array.from(
     document.querySelectorAll("[role=main] [role=row]")
   ).filter((node) => node.offsetParent);
 
-  let firstItem = possibleListItems[0];
+  const firstItem = possibleListItems[0];
 
-  let listLength = possibleListItems.length;
+  const listLength = possibleListItems.length;
 
-  let possibleNextBtns = true
+  const possibleNextBtns = true
     ? document.querySelectorAll('[data-tooltip="Older"]')
     : document.querySelectorAll('[data-tooltip="Newer"]');
 
-  let nextBtn = Array.from(possibleNextBtns).filter(
+  const nextBtn = Array.from(possibleNextBtns).filter(
     (node) => node.offsetParent
   )[0];
   // On narrow viewport width, gmail can hide these buttons, in that case, choose the one furthest down the page (likely highest on UI layers?)
@@ -45,35 +45,47 @@ function scrapeListMeta() {
   };
 }
 
-function scrapeMessageMeta() {
-  let possibleUnsubLinks = Array.from(document.querySelectorAll("a")).filter(
-    (a) => /unsubscribe/i.test(a.textContent) || /unsubscribe/i.test(a.href)
-  );
-  let possibleUnsubBtn = document.querySelector("[idlink]");
-  let possibleNextBtns = true
+function scrapeWindowMeta() {
+  const possibleNextBtns = true
     ? document.querySelectorAll('[data-tooltip="Older"]')
     : document.querySelectorAll('[data-tooltip="Newer"]');
 
-  let unsubLink = possibleUnsubLinks.length > 0 ? possibleUnsubLinks[0] : false;
-  let unsubBtn =
-    possibleUnsubBtn?.textContent?.toLowerCase() === "unsubscribe"
-      ? possibleUnsubBtn
-      : false;
-  let nextBtn = Array.from(possibleNextBtns).filter(
+  const nextBtn = Array.from(possibleNextBtns).filter(
     (node) => node.offsetParent
   )[0];
+
   // On narrow viewport width, gmail can hide these buttons, in that case, choose the one furthest down the page (likely highest on UI layers?)
   if (!nextBtn && possibleNextBtns.length > 0)
     nextBtn = possibleNextBtns[possibleNextBtns.length - 1];
 
-  let sender = document
+  return { nextBtn };
+}
+
+function scrapeMessageMeta() {
+  const { nextBtn } = scrapeWindowMeta();
+  const msgEl = document.querySelector("[role=main]");
+
+  const possibleUnsubLinks = Array.from(msgEl.querySelectorAll("a")).filter(
+    (a) => /unsubscribe/i.test(a.textContent) || /unsubscribe/i.test(a.href)
+  );
+  const unsubLink =
+    possibleUnsubLinks.length > 0 ? possibleUnsubLinks[0] : false;
+
+  const possibleUnsubBtn = msgEl.querySelector("[idlink]");
+  const unsubBtn =
+    possibleUnsubBtn?.textContent?.toLowerCase() === "unsubscribe"
+      ? possibleUnsubBtn
+      : false;
+
+  const sender = msgEl
     .querySelectorAll("span .go")[0]
     ?.textContent?.replace(/[<>]/g, "");
-  let subject = document.querySelectorAll("[data-thread-perm-id]")[0]
+  const subject = msgEl.querySelectorAll("[data-thread-perm-id]")[0]
     ?.textContent;
-  let when = document.querySelectorAll('[alt*=":"][title*=":"]')[0]
-    ?.textContent;
-  let url = window.location.href;
+  const when = msgEl.querySelectorAll('[alt*=":"][title*=":"]')[0]?.textContent;
+  const msgUrl = window.location.href;
+
+  console.log("from scraper url, subject, sender, ", msgUrl, subject, sender);
 
   return {
     sender,
@@ -82,7 +94,7 @@ function scrapeMessageMeta() {
     unsubLink: unsubLink.href,
     unsubBtn,
     nextBtn,
-    url,
+    url: msgUrl,
   };
 }
 

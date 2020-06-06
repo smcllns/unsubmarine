@@ -4,19 +4,23 @@ import {
   scrapeListMeta,
   scrapeMessageMeta,
 } from "./scraper.js";
+import { waitForGmailPageChangeOnce } from "./observers";
 
 export default class Unsubmarine {
   constructor(limit = 5) {
+    console.log("constructor Unsubmarine");
     this.killSwitch = false;
-    this.delay = 1000; // TODO: detect DOM changes, not timer
+    this.delay = 1000;
     this.unsubLimit = limit;
     this.unsubCount;
     this.prevRun;
   }
 
   async *start() {
+    console.log("started *start()");
     this.prevRun = undefined;
     this.unsubCount = 0;
+
     while (true) {
       if (this.killSwitch) return { log: "stop" };
 
@@ -35,33 +39,40 @@ export default class Unsubmarine {
   }
 
   async run() {
-    return new Promise((resolve, reject) => {
+    console.log("started run()");
+    return new Promise(async (resolve, reject) => {
       if (isListView()) {
         let l = scrapeListMeta();
         l.firstItem.click();
-        return setTimeout(() => {
-          if (this.killSwitch) resolve({ error: false, stop: true });
-          resolve({ error: false, skipIncrement: true });
-        }, this.delay * 3);
+        await waitForGmailPageChangeOnce();
+        console.log("skip run for listView");
+        if (this.killSwitch) resolve({ error: false, stop: true });
+        return resolve({ error: false, skipIncrement: true });
       }
 
       let m = scrapeMessageMeta();
+      console.log("m scraped:", m);
       if (m.url === this.prevRun?.m?.url) {
-        // KP: scrape seems to have failed and m has new url but other fields are old
-        resolve({
+        // KP: scrape seems to have failed and m has new url but other fields are old.
+        return resolve({
           error: true,
           msg: "same url",
           m,
         });
       }
 
-      if (m.unsubLink) this.unsubCount++;
-      if (m.nextBtn) m.nextBtn.click();
+      if (this.killSwitch) resolve({ error: false, stop: true });
 
-      return setTimeout(() => {
-        if (this.killSwitch) resolve({ error: false, stop: true });
-        resolve({ error: false, m });
-      }, this.delay);
+      if (m.unsubLink) this.unsubCount++;
+
+      if (m.nextBtn) {
+        console.log("click Next");
+        m.nextBtn.click();
+        await waitForGmailPageChangeOnce();
+        console.log("finished awaiting page change");
+      }
+
+      return resolve({ error: false, m });
     });
   }
 }

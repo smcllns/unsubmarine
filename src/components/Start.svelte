@@ -1,23 +1,22 @@
 <script>
   import Dialog from "./Dialog.svelte";
   import { simulateTyping } from "../lib/utils";
-  export let moveToNextView, running;
+  import { waitForGmailPageChangeOnce } from "../lib/observers";
+  export let moveToNextView, startUnsubmarine;
 
   const delay = 1000;
 
   const handleAdvancedMode = e => {
     moveToNextView(1);
     setTimeout(() => {
-      running = true;
-    }, delay * 1);
+      startUnsubmarine();
+    }, 100);
   };
 
-  const handleStandardMode = e => {
+  const handleStandardMode = async e => {
     moveToNextView(1);
-    navigateToSearchPageAnimatedly();
-    setTimeout(() => {
-      running = true;
-    }, delay * 3);
+    await navigateToSearchPageAnimatedly();
+    startUnsubmarine();
   };
 
   async function navigateToSearchPageAnimatedly() {
@@ -29,7 +28,12 @@
     await simulateTyping(searchInput, "unsubscribe");
     parent.style.backgroundColor = defaultColor;
     parent.style.color = "inherit";
-    window.location.hash = "#search/unsubscribe";
+    console.log("wait for search page load");
+    if (window.location.hash !== "#search/unsubscribe") {
+      window.location.hash = "#search/unsubscribe";
+      await waitForGmailPageChangeOnce();
+    }
+    console.log("search page loaded");
   }
 </script>
 

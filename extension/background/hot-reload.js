@@ -22,16 +22,15 @@ const timestampForFilesInDirectory = (dir) =>
 
 const reload = () => {
   // NB: see https://github.com/xpl/crx-hotreload/issues/5
-  chrome.tabs.query(
-    { active: true, windowType: "normal", lastFocusedWindow: true },
-    (tabs) => {
-      console.log("tabs", tabs);
-      if (tabs[0]) {
-        chrome.tabs.reload(tabs[0].id);
-        chrome.runtime.reload();
-      }
+
+  // windowType: "normal",
+  chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+    console.log("tabs", tabs);
+    if (tabs[0]) {
+      chrome.tabs.reload(tabs[0].id);
     }
-  );
+    chrome.runtime.reload();
+  });
 };
 
 const watchChanges = (dir, lastTimestamp) => {

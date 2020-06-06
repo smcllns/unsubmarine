@@ -5,7 +5,13 @@
   import Unsubmarine from "./Unsubmarine.svelte";
   import Tailwindcss from "../lib/Tailwindcss.svelte";
 
-  let currentViewState, actionableResults, killSwitch, i, running;
+  let currentViewState = false,
+    actionableResults = [],
+    killSwitch = false,
+    i = 0,
+    running = false,
+    startUnsubmarine;
+
   const viewStates = ["start", "progress", "review"];
 
   chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
@@ -52,7 +58,7 @@
   }
 
   function handleShortcutKeys(e) {
-    if (e.key === "Escape") exit();
+    if (e.key === "Escape") stopAndCancel();
   }
 
   function moveToNextView(flag) {
@@ -65,7 +71,7 @@
 
 <div id="unsubmarine">
   {#if currentViewState === viewStates[0]}
-    <Start {moveToNextView} bind:running />
+    <Start {moveToNextView} {startUnsubmarine} />
   {/if}
 
   {#if currentViewState === viewStates[1]}
@@ -76,6 +82,7 @@
     bind:actionableResults
     bind:i
     bind:running
+    bind:startUnsubmarine
     {killSwitch}
     {stopAndReview}
     {stopAndCancel} />

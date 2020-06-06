@@ -84,7 +84,7 @@
             <label for={`i-${i}`}>{emailsBySender[0].sender}</label>
           </td>
           <td>{emailsBySender.length}</td>
-          <td class="Results__SubjectCell max-w-xs overflow-x-hidden">
+          <td>
             <label for={`i-${i}`}>
               {#each emailsBySender as email}
                 <a
@@ -125,9 +125,8 @@
 
 <style>
   td {
-    @apply whitespace-no-wrap p-1;
-  }
-  .Results__SubjectCell {
+    @apply whitespace-no-wrap p-1 overflow-x-hidden;
     text-overflow: ellipsis;
+    max-width: min(20rem, 30vw);
   }
 </style>
