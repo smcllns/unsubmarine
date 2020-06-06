@@ -3,10 +3,10 @@
   export let actionableResults,
     killSwitch,
     i,
-    stopAndReview,
-    stopAndCancel,
     startUnsubmarine,
-    unsubLimit;
+    unsubLimit,
+    stop,
+    cancel;
 
   const unsubmarine = new Unsubmarine(unsubLimit);
 
@@ -29,10 +29,10 @@
       }
 
       if (result.error) {
-        stopAndCancel();
+        cancel();
         break;
       }
     }
-    stopAndReview();
+    stop();
   };
 </script>

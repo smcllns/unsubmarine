@@ -1,3 +1,10 @@
+<script context="module">
+  // Known little bugs to cleanup
+  // - Unsub Limit = 5, it stops at 4
+  // - Hitting Finish button, the background scraper continues through 2 more emails
+  // - Need a solution to all the routing being here, and passed down as props (store?)
+</script>
+
 <script>
   import Start from "./Start.svelte";
   import Review from "./Review.svelte";
@@ -18,46 +25,46 @@
   chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     if (req.message === "clicked_browser_extension_icon") {
       reset();
+      document.addEventListener("keyup", handleShortcutKeys);
       moveToNextView(0);
     }
   });
 
   function reset() {
     killSwitch = false;
+    currentViewState = false;
     i = 0;
     actionableResults = [];
-    currentViewState = false;
     document.removeEventListener("keyup", handleShortcutKeys);
-    document.addEventListener("keyup", handleShortcutKeys);
   }
 
-  // A note on managing state through the components:
-  // Kill Switch controls the Unsubmarine scraper which is controlling gmail, and feels scary when you can't stop it immediately
-  // Changing/hiding UI layer is handled separately  with moveNextView
+  function start() {
+    moveToNextView(1);
+    startUnsubmarine();
+  }
 
-  function stopAndCancel() {
+  function cancel() {
     killSwitch = true;
     moveToNextView(false);
-    cleanup();
+    reset();
   }
 
-  function stopAndReview() {
+  function hideUI() {
+    moveToNextView(false);
+  }
+
+  function stop() {
     killSwitch = true;
     moveToNextView(2);
   }
 
-  function cleanup() {
-    document.removeEventListener("keyup", handleShortcutKeys);
-  }
-
   function handleShortcutKeys(e) {
-    if (e.key === "Escape") stopAndCancel();
+    if (e.key === "Escape") cancel();
   }
 
   function moveToNextView(flag) {
     if (flag === false) return (currentViewState = false);
     if (Number.isInteger(flag)) return (currentViewState = viewStates[flag]);
-    // go to specific UI state
   }
 </script>
 
@@ -67,21 +74,21 @@
     bind:actionableResults
     bind:i
     bind:startUnsubmarine
+    {stop}
+    {cancel}
     {unsubLimit}
-    {killSwitch}
-    {stopAndReview}
-    {stopAndCancel} />
+    {killSwitch} />
 
   {#if currentViewState === viewStates[0]}
-    <Start {moveToNextView} {startUnsubmarine} />
+    <Start {start} {cancel} {hideUI} />
   {/if}
 
   {#if currentViewState === viewStates[1]}
-    <Progress {actionableResults} {i} {stopAndCancel} {stopAndReview} />
+    <Progress {actionableResults} {i} {cancel} {stop} />
   {/if}
 
   {#if currentViewState === viewStates[2]}
-    <Review {actionableResults} {moveToNextView} />
+    <Review {actionableResults} {cancel} />
   {/if}
 </div>
 

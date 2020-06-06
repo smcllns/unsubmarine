@@ -2,17 +2,16 @@
   import Dialog from "./Dialog.svelte";
   import { simulateTyping } from "../lib/utils";
   import { waitForGmailPageChangeOnce } from "../lib/observers";
-  export let moveToNextView, startUnsubmarine;
+  export let start, cancel, hideUI;
 
   const handleAdvancedMode = e => {
-    moveToNextView(1);
-    startUnsubmarine();
+    start();
   };
 
   const handleStandardMode = async e => {
-    moveToNextView(1);
+    hideUI();
     await navigateToSearchPageAnimatedly();
-    startUnsubmarine();
+    start();
   };
 
   async function navigateToSearchPageAnimatedly() {
@@ -32,7 +31,7 @@
 </script>
 
 <Dialog
-  {moveToNextView}
+  {cancel}
   title="Welcome to Unsubmarine"
   subtitle="Automating unsubscribe for gmail">
 

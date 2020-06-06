@@ -1,5 +1,5 @@
 <script>
-  export let title, subtitle, moveToNextView;
+  export let title, subtitle, cancel;
 </script>
 
 <div
@@ -8,11 +8,7 @@
   <div
     class="Dialog flex flex-col justify-center px-4 md:px-16 py-8 m-4 bg-white
     text-black rounded-lg pointer-events-auto relative">
-    <span
-      on:click|preventDefault={e => moveToNextView(false)}
-      class="Dialog__Close">
-      &#x2716;
-    </span>
+    <span on:click|preventDefault={cancel} class="Dialog__Close">&#x2716;</span>
 
     <header class="pb-12 mx-auto max-w-lg text-center">
       <h1 class="text-3xl font-bold">{title}</h1>

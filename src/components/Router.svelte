@@ -1,8 +1,8 @@
-<script>
-  // Not being used
-  export let currentViewState, killSwitch;
+<script context="module">
   const viewStates = ["prompt", "progress", "review"];
+</script>
 
+<script>
   export let moveToNextView = flag => {
     if (flag === false) return (currentViewState = false);
     if (Number.isInteger(flag)) return (currentViewState = viewStates[flag]);

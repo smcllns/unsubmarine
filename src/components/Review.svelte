@@ -1,7 +1,7 @@
 <script>
   import Dialog from "./Dialog.svelte";
   import { prettyTimestamp } from "../lib/utils";
-  export let actionableResults, moveToNextView;
+  export let actionableResults, cancel;
 
   const resultsGroupedBySender = actionableResults.reduce((acc, item) => {
     const { sender, subject, when, unsubLink, url } = item;
@@ -29,7 +29,7 @@
           urls: selectedResults.map(r => r[0].unsubLink)
         })
       : console.log("no actionable results to open");
-    moveToNextView(false);
+    cancel();
   }
 
   function handleCheckboxChange(i) {
@@ -48,7 +48,7 @@
 </script>
 
 <Dialog
-  {moveToNextView}
+  {cancel}
   title="Confirm Unsubscribes"
   subtitle="Select which emails to unsubscribe from">
 
@@ -108,9 +108,7 @@
   </table>
 
   <div class="flex justify-between items center pt-8">
-    <button
-      on:click|preventDefault={e => moveToNextView(false)}
-      class="Btn Tertiary">
+    <button on:click|preventDefault={cancel} class="Btn Tertiary">
       Cancel
     </button>
     <button

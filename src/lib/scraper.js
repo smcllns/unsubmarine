@@ -51,7 +51,7 @@ function scrapeWindowMeta() {
     : document.querySelectorAll('[data-tooltip="Newer"]');
   // Making a note of selectors, may want to go forward and backwards sometime
 
-  const nextBtn = Array.from(possibleNextBtns).filter(
+  let nextBtn = Array.from(possibleNextBtns).filter(
     (node) => node.offsetParent && node.getAttribute("aria-disabled") !== "true"
   )[0];
 
