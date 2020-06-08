@@ -53,7 +53,7 @@ export default class Unsubmarine {
         return resolve({ stopped: true });
       }
 
-      if (m.nextBtn) {
+      if (m.nextBtn && !this.killSwitch) {
         m.nextBtn.click();
         await waitForGmailPageChangeOnce();
       }

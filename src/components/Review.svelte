@@ -1,9 +1,7 @@
 <script>
   import Dialog from "./Dialog.svelte";
-  import { actionableResults } from "./stores";
-
-  import { prettyTimestamp } from "../lib/utils";
-  export let cancel;
+  import { actionableResults } from "../stores";
+  import { cancel } from "../navigation";
 
   const resultsGroupedBySender = $actionableResults.reduce((acc, item) => {
     const { sender, subject, when, unsubLink, url } = item;
@@ -47,10 +45,12 @@
       return r;
     });
   }
+
+  const prettyTimestamp = (str = "") =>
+    /\((.*)\)/.test(str) ? str.match(/\((.*)\)/)[1] : "";
 </script>
 
 <Dialog
-  {cancel}
   title="Confirm Unsubscribes"
   subtitle="Select which emails to unsubscribe from">
 

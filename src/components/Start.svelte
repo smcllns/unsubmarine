@@ -1,8 +1,7 @@
 <script>
   import Dialog from "./Dialog.svelte";
-  import { simulateTyping } from "../lib/utils";
-  import { waitForGmailPageChangeOnce } from "../lib/observers";
-  export let start, cancel, hideUI;
+  import { waitForGmailPageChangeOnce } from "../lib/unsubmarine/observers";
+  import { start, hideUI } from "../navigation";
 
   const handleAdvancedMode = e => {
     start();
@@ -28,10 +27,20 @@
       await waitForGmailPageChangeOnce();
     }
   }
+
+  function simulateTyping(input, string) {
+    return new Promise((resolve, reject) => {
+      string.split("").forEach((char, index) => {
+        setTimeout(() => {
+          input.value = string.slice(0, index + 1);
+          if (index === string.length - 1) resolve();
+        }, 200 * index + 100 * Math.random());
+      });
+    });
+  }
 </script>
 
 <Dialog
-  {cancel}
   title="Welcome to Unsubmarine"
   subtitle="Automating unsubscribe for gmail">
 

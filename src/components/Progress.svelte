@@ -1,14 +1,13 @@
 <script>
-  export let cancel, stop;
-  import { actionableResults, processedEmailCount } from "./stores";
+  import { actionableResults, processedEmailCount } from "../stores";
+  import { stop } from "../navigation";
 </script>
 
 <div class="flex flex-1 flex-col-reverse pointer-events-none">
   <div
-    class="flex justify-between items-center p-4 mx-8 rounded-t-lg bg-black
-    text-white pointer-events-auto">
-    <span class="Btn Tertiary" on:click|preventDefault={cancel}>Cancel</span>
-    <div class="text-center text-sm">
+    class="flex justify-between items-center py-4 px-6 mx-8 rounded-t-lg
+    bg-black text-white pointer-events-auto">
+    <div class="text-sm">
       <p class="font-bold">Searching for unsubscribe links...</p>
       <p>
         {$processedEmailCount} email searched; {$actionableResults.length}
