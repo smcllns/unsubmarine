@@ -1,9 +1,8 @@
 <script>
   import Dialog from "./Dialog.svelte";
   import { actionableResults } from "./stores";
-
+  import { cancel } from "./navigation";
   import { prettyTimestamp } from "../lib/utils";
-  export let cancel;
 
   const resultsGroupedBySender = $actionableResults.reduce((acc, item) => {
     const { sender, subject, when, unsubLink, url } = item;
@@ -50,7 +49,6 @@
 </script>
 
 <Dialog
-  {cancel}
   title="Confirm Unsubscribes"
   subtitle="Select which emails to unsubscribe from">
 

@@ -1,8 +1,8 @@
 <script>
   import Dialog from "./Dialog.svelte";
   import { simulateTyping } from "../lib/utils";
-  import { waitForGmailPageChangeOnce } from "../lib/observers";
-  export let start, cancel, hideUI;
+  import { waitForGmailPageChangeOnce } from "../lib/unsubmarine/observers";
+  import { start, hideUI } from "./navigation";
 
   const handleAdvancedMode = e => {
     start();
@@ -31,7 +31,6 @@
 </script>
 
 <Dialog
-  {cancel}
   title="Welcome to Unsubmarine"
   subtitle="Automating unsubscribe for gmail">
 

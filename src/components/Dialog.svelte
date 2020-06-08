@@ -1,5 +1,6 @@
 <script>
-  export let title, subtitle, cancel;
+  import { cancel } from "./navigation";
+  export let title, subtitle;
 </script>
 
 <div
