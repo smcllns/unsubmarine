@@ -10,80 +10,71 @@
   import Progress from "./Progress.svelte";
   import Unsubmarine from "./Unsubmarine.svelte";
   import Tailwindcss from "./Tailwindcss.svelte";
-  import { actionableResults, processedEmailCount } from "./stores";
+  import {
+    actionableResults,
+    processedEmailCount,
+    viewState,
+    killSwitchOn,
+    unsubLimit
+  } from "./stores";
 
-  const unsubLimit = 5; // Todo: make a micropayment to extend
-
-  let currentViewState = false,
-    killSwitch = false,
-    startUnsubmarine;
-
-  const viewStates = ["start", "progress", "review"];
+  let startUnsubmarine;
 
   chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     if (req.message === "clicked_browser_extension_icon") {
       reset();
       document.addEventListener("keyup", handleShortcutKeys);
-      moveToNextView(0);
+      viewState.moveToNextView("start");
     }
   });
 
   function reset() {
-    killSwitch = false;
-    currentViewState = false;
+    killSwitchOn.set(false);
+    viewState.reset();
     processedEmailCount.set(0);
     actionableResults.set([]);
     document.removeEventListener("keyup", handleShortcutKeys);
+    unsubLimit.set(5); // Todo: make a micropayment to extend
   }
 
   function start() {
-    moveToNextView(1);
+    viewState.moveToNextView("progress");
     startUnsubmarine();
   }
 
   function cancel() {
-    killSwitch = true;
-    moveToNextView(false);
+    killSwitchOn.set(true);
+    viewState.moveToNextView(false);
     reset();
   }
 
   function hideUI() {
-    moveToNextView(false);
+    viewState.moveToNextView(false);
   }
 
   function stop() {
-    killSwitch = true;
-    moveToNextView(2);
+    killSwitchOn.set(true);
+    viewState.moveToNextView("review");
   }
 
   function handleShortcutKeys(e) {
     if (e.key === "Escape") cancel();
   }
-
-  function moveToNextView(flag) {
-    if (flag === false) return (currentViewState = false);
-    if (Number.isInteger(flag)) return (currentViewState = viewStates[flag]);
-  }
 </script>
 
 <div id="unsubmarine">
 
-  <Unsubmarine
-    bind:startUnsubmarine
-    {stop}
-    {cancel}
-    {unsubLimit}
-    {killSwitch} />
+  <Unsubmarine bind:startUnsubmarine {stop} {cancel} />
 
-  {#if currentViewState === viewStates[0]}
+  {#if $viewState === 'start'}
     <Start {start} {cancel} {hideUI} />
   {/if}
 
-  {#if currentViewState === viewStates[1]}
+  {#if $viewState === 'progress'}
     <Progress {cancel} {stop} />
   {/if}
 
-  {#if currentViewState === viewStates[2]}
+  {#if $viewState === 'review'}
     <Review {cancel} />
   {/if}
 </div>

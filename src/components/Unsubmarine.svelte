@@ -1,14 +1,14 @@
 <script>
   import Unsubmarine from "../lib/unsubmarine";
-  export let killSwitch, startUnsubmarine, unsubLimit, stop, cancel;
-  import { actionableResults, processedEmailCount } from "./stores";
+  export let startUnsubmarine, stop, cancel;
+  import {
+    actionableResults,
+    processedEmailCount,
+    killSwitchOn,
+    unsubLimit
+  } from "./stores";
 
-  const unsubmarine = new Unsubmarine(unsubLimit);
-
-  $: {
-    console.log("$ Change killswitch", killSwitch);
-    unsubmarine.killSwitch = killSwitch;
-  }
+  const unsubmarine = new Unsubmarine($unsubLimit);
 
   startUnsubmarine = async () => {
     actionableResults.set([]);
@@ -25,6 +25,7 @@
         cancel();
         break;
       }
+      unsubmarine.killSwitch = $killSwitchOn;
     }
     stop();
   };
