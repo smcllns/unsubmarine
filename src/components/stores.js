@@ -28,4 +28,5 @@ function createViewState() {
 
 export const processedEmailCount = writable(0);
 export const actionableResults = writable([]);
+export const killSwitchActivated = writable(false);
 export const currentViewState = createViewState();

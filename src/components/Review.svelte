@@ -1,9 +1,11 @@
 <script>
   import Dialog from "./Dialog.svelte";
-  import { prettyTimestamp } from "../lib/utils";
-  export let actionableResults, cancel;
+  import { actionableResults } from "./stores";
 
-  const resultsGroupedBySender = actionableResults.reduce((acc, item) => {
+  import { prettyTimestamp } from "../lib/utils";
+  export let cancel;
+
+  const resultsGroupedBySender = $actionableResults.reduce((acc, item) => {
     const { sender, subject, when, unsubLink, url } = item;
     const key = sender && sender.replace(/[@\.]/g, "");
     if (!acc[key]) acc[key] = [];

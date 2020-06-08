@@ -1,12 +1,7 @@
 <script>
   import Unsubmarine from "../lib/unsubmarine";
-  export let actionableResults,
-    killSwitch,
-    i,
-    startUnsubmarine,
-    unsubLimit,
-    stop,
-    cancel;
+  export let killSwitch, startUnsubmarine, unsubLimit, stop, cancel;
+  import { actionableResults, processedEmailCount } from "./stores";
 
   const unsubmarine = new Unsubmarine(unsubLimit);
 
@@ -16,16 +11,14 @@
   }
 
   startUnsubmarine = async () => {
-    actionableResults = [];
-    i = 1; // update UI for first msg // doesn't work if navigating lists
+    actionableResults.set([]);
     for await (const result of unsubmarine.start()) {
       console.log("value from unsub generator", result);
 
-      i = i + 1;
-      // explicit assignment to trigger svelte reactivity
+      processedEmailCount.update(n => n + 1);
 
       if (result.unsubLink && !result.error) {
-        actionableResults = [...actionableResults, result];
+        actionableResults.update(prev => [...prev, result]);
       }
 
       if (result.error) {

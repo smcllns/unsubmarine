@@ -10,13 +10,12 @@
   import Progress from "./Progress.svelte";
   import Unsubmarine from "./Unsubmarine.svelte";
   import Tailwindcss from "./Tailwindcss.svelte";
+  import { actionableResults, processedEmailCount } from "./stores";
 
   const unsubLimit = 5; // Todo: make a micropayment to extend
 
   let currentViewState = false,
-    actionableResults = [],
     killSwitch = false,
-    i = 0,
     startUnsubmarine;
 
   const viewStates = ["start", "progress", "review"];
@@ -32,8 +31,8 @@
   function reset() {
     killSwitch = false;
     currentViewState = false;
-    i = 0;
-    actionableResults = [];
+    processedEmailCount.set(0);
+    actionableResults.set([]);
     document.removeEventListener("keyup", handleShortcutKeys);
   }
 
@@ -70,8 +69,6 @@
 <div id="unsubmarine">
 
   <Unsubmarine
-    bind:actionableResults
-    bind:i
     bind:startUnsubmarine
     {stop}
     {cancel}
@@ -83,11 +80,11 @@
   {/if}
 
   {#if currentViewState === viewStates[1]}
-    <Progress {actionableResults} {i} {cancel} {stop} />
+    <Progress {cancel} {stop} />
   {/if}
 
   {#if currentViewState === viewStates[2]}
-    <Review {actionableResults} {cancel} />
+    <Review {cancel} />
   {/if}
 </div>
 

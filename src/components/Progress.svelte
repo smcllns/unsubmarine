@@ -1,5 +1,6 @@
 <script>
-  export let actionableResults, i, cancel, stop;
+  export let cancel, stop;
+  import { actionableResults, processedEmailCount } from "./stores";
 </script>
 
 <div class="flex flex-1 flex-col-reverse pointer-events-none">
@@ -10,7 +11,8 @@
     <div class="text-center text-sm">
       <p class="font-bold">Searching for unsubscribe links...</p>
       <p>
-        {i} email searched; {actionableResults.length} unsubscribe links found
+        {$processedEmailCount} email searched; {$actionableResults.length}
+        unsubscribe links found
       </p>
     </div>
     <span class="Btn Primary" on:click|preventDefault={stop}>Finish</span>
