@@ -1,11 +1,10 @@
-<script context="module">
-  // Known little bugs to cleanup
+<script>
+  // Known little bugs to cleanup:
   // - Unsub Limit = 5, it stops at 4
   // - Hitting Finish button, the background scraper continues through 2 more emails
+  // - Hitting Cancel doesn't seem to cleanly kill (the review window popped up) --- should remove Cancel and just make Stop button and always review. Too hard to decide between Finish and Cancel.
   // - Need a solution to all the routing being here, and passed down as props (store?)
-</script>
 
-<script>
   import Start from "./Start.svelte";
   import Review from "./Review.svelte";
   import Progress from "./Progress.svelte";
