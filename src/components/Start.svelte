@@ -45,7 +45,12 @@
 <Dialog>
 
   <header class="pb-8 mx-auto max-w-lg text-center">
-    <img src={imgSrc} width="48px" height="auto" class="mx-auto pb-2" />
+    <img
+      alt="unsubmarine logo"
+      src={imgSrc}
+      width="48px"
+      height="auto"
+      class="mx-auto pb-2" />
     <h1 class="text-3xl font-bold">Welcome to Unsubmarine</h1>
     <p>Unsubscribe automation for gmail while preserving privacy</p>
   </header>
@@ -83,7 +88,7 @@
     </div>
 
     <p class="mb-4 text-center">
-      <a href="//smcllns.com" target="_blank">
+      <a href="//smcllns.com/memo/unsubmarine" target="_blank">
         Read more about how this works.
       </a>
       <br />
