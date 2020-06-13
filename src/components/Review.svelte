@@ -2,16 +2,9 @@
   import Dialog from "./Dialog.svelte";
   import { actionableResults } from "../stores";
   import { cancel } from "../actions";
+  let displayedResults, selectedResults;
 
-  const resultsGroupedBySender = $actionableResults.reduce((acc, item) => {
-    const { sender, subject, when, unsubLink, url } = item;
-    const key = sender && sender.replace(/[@\.]/g, "");
-    if (!acc[key]) acc[key] = [];
-    acc[key] = [...acc[key], { sender, subject, when, unsubLink, url }];
-    return acc;
-  }, {});
-
-  let displayedResults = Object.values(resultsGroupedBySender).map(r => {
+  $: displayedResults = groupResultsBySender($actionableResults).map(r => {
     r.checked = true;
     return r;
   });
@@ -32,12 +25,25 @@
     cancel();
   }
 
+  function groupResultsBySender(resultsArr) {
+    const groupedObj = resultsArr.reduce((acc, item) => {
+      const { sender, subject, when, unsubLink, url } = item;
+      const key = sender && sender.replace(/[@\.]/g, "");
+      if (!acc[key]) acc[key] = [];
+      acc[key] = [...acc[key], { sender, subject, when, unsubLink, url }];
+      return acc;
+    }, {});
+
+    return Object.values(groupedObj);
+  }
+
   function handleCheckboxChange(i) {
     displayedResults = displayedResults.map((r, index) => {
       if (index === i) r.checked = !r.checked;
       return r;
     });
   }
+
   function handleCheckedAllChange(e) {
     const isChecked = e.target.checked;
     displayedResults = displayedResults.map((r, index) => {
@@ -55,7 +61,7 @@
   subtitle="Select which emails to unsubscribe from">
 
   <table>
-    <thead class="font-bold">
+    <thead class="font-bold border-b border-gray-300">
       <tr>
         <td class="text-center">
           <input
@@ -128,5 +134,13 @@
     @apply whitespace-no-wrap p-1 overflow-x-hidden;
     text-overflow: ellipsis;
     max-width: min(20rem, 30vw);
+  }
+  tbody:before {
+    content: "\a0";
+    display: block;
+    padding: 0;
+    margin: 0;
+    line-height: 0;
+    height: 0.25rem;
   }
 </style>
