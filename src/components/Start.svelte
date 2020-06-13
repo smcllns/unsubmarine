@@ -52,7 +52,7 @@
       height="auto"
       class="mx-auto pb-2" />
     <h1 class="text-3xl font-bold">Welcome to Unsubmarine</h1>
-    <p>Unsubscribe automation for gmail while preserving privacy</p>
+    <p>Automated unsubscribe in gmail while preserving your privacy</p>
   </header>
 
   <div class="max-w-lg">
@@ -88,11 +88,11 @@
     </div>
 
     <p class="mb-4 text-center">
-      <a href="//smcllns.com/memo/unsubmarine" target="_blank">
+      <a href="//smcllns.com/memo/unsubmarine?ref=svelte" target="_blank">
         Read more about how this works.
       </a>
       <br />
-      TLDR: Strictly no email data leaves your browser, but that limits what
+      TLDR: Strictly non of your data leaves your browser, but that limits what
       features are possible.
     </p>
   </div>

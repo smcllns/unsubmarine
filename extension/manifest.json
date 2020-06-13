@@ -2,6 +2,8 @@
   "manifest_version": 2,
   "name": "Unsubmarine",
   "version": "0.1.0",
+  "description": "Automated unsubscribe in gmail while preserving your privacy",
+  "homepage": "https://smcllns.com/memo/unsubmarine?ref=crxwebstore",
   "content_scripts": [
     {
       "matches": ["https://mail.google.com/*"],
@@ -18,6 +20,6 @@
     "images/*.png"
   ],
   "browser_action": {
-    "default_icon": "images/icon-unsubmarine-round.png"
+    "default_icon": "images/icon-unsubmarine.png"
   }
 }
