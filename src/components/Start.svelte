@@ -1,7 +1,7 @@
 <script>
   import Dialog from "./Dialog.svelte";
   import { waitForGmailPageChangeOnce } from "../lib/unsubmarine/observers";
-  import { start, hideUI } from "../navigation";
+  import { start, hideUI } from "../actions";
 
   const handleAdvancedMode = e => {
     start();

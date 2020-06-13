@@ -1,7 +1,7 @@
 <script>
   import Dialog from "./Dialog.svelte";
   import { actionableResults } from "../stores";
-  import { cancel } from "../navigation";
+  import { cancel } from "../actions";
 
   const resultsGroupedBySender = $actionableResults.reduce((acc, item) => {
     const { sender, subject, when, unsubLink, url } = item;

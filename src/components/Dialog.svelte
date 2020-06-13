@@ -1,5 +1,5 @@
 <script>
-  import { cancel } from "../navigation";
+  import { cancel } from "../actions";
   export let title, subtitle;
 </script>
 

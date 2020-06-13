@@ -1,6 +1,6 @@
 <script>
   import { actionableResults, processedEmailCount } from "../stores";
-  import { stop } from "../navigation";
+  import { stop } from "../actions";
 </script>
 
 <div class="flex flex-1 flex-col-reverse pointer-events-none">

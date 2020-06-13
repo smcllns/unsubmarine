@@ -5,7 +5,7 @@
   import Tailwindcss from "./Tailwindcss.svelte";
 
   import { viewState } from "../stores";
-  import { handleExtensionClick } from "../navigation";
+  import { handleExtensionClick } from "../actions";
 
   chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     if (req.message === "clicked_browser_extension_icon")

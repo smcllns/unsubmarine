@@ -1,5 +1,5 @@
 const waitForGmailPageChangeOnce = () => {
-  // Gmail uses [role=main] for the RHS "page"
+  // Gmail switches [role=main] to different elements when navigating to new "page"
   return new Promise((resolve, reject) => {
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
@@ -7,7 +7,7 @@ const waitForGmailPageChangeOnce = () => {
           mutation.type === "attributes" &&
           mutation.target.getAttribute("role") === "main"
         ) {
-          console.log("role=main change");
+          console.log("gmail page change detected");
           observer.disconnect();
           resolve(mutation.target);
         }

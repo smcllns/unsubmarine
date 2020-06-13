@@ -23,46 +23,32 @@ function scrapeListMeta() {
     document.querySelectorAll("[role=main] [role=row]")
   ).filter((node) => node.offsetParent);
 
-  const firstItem = possibleListItems[0];
-
-  const listLength = possibleListItems.length;
-
-  const possibleNextBtns = true
-    ? document.querySelectorAll('[data-tooltip="Older"]')
-    : document.querySelectorAll('[data-tooltip="Newer"]');
-
-  const nextBtn = Array.from(possibleNextBtns).filter(
-    (node) => node.offsetParent
-  )[0];
-  // On narrow viewport width, gmail can hide these buttons, in that case, choose the one furthest down the page (likely highest on UI layers?)
-  if (!nextBtn && possibleNextBtns.length > 0)
-    nextBtn = possibleNextBtns[possibleNextBtns.length - 1];
-
   return {
-    firstItem,
-    listLength,
-    nextBtn,
+    firstItem: possibleListItems[0],
   };
 }
 
 function scrapeWindowMeta() {
   const possibleNextBtns = true
-    ? document.querySelectorAll('[data-tooltip="Older"]')
-    : document.querySelectorAll('[data-tooltip="Newer"]');
-  // Making a note of selectors, may want to go forward and backwards sometime
+    ? document.querySelectorAll(
+        '[data-tooltip="Older"]:not([aria-disabled="true"])'
+      )
+    : document.querySelectorAll(
+        '[data-tooltip="Newer"]:not([aria-disabled="true"])'
+      );
+  // Making a note of selectors; may want to go forward and backwards sometime
 
   let nextBtn = Array.from(possibleNextBtns).filter(
-    (node) => node.offsetParent && node.getAttribute("aria-disabled") !== "true"
-  )[0];
+    // offsetParent === null when element is hidden by display:none
+    // On narrow viewport width, gmail can hide these buttons, in that case, they are not hidden by display none, so this continues to select the right one
+    (node) => node.offsetParent
+  );
 
-  // On narrow viewport width, gmail can hide these buttons, in that case, choose the one furthest down the page (likely highest on UI layers?)
-  if (!nextBtn && possibleNextBtns.length > 0)
-    nextBtn = possibleNextBtns[possibleNextBtns.length - 1];
-
-  return { nextBtn };
+  return { nextBtn: nextBtn[0] };
 }
 
 function scrapeMessageMeta() {
+  // Needs cleaning up
   const { nextBtn } = scrapeWindowMeta();
   const msgEl = document.querySelector("[role=main]");
 
@@ -85,8 +71,6 @@ function scrapeMessageMeta() {
     ?.textContent;
   const when = msgEl.querySelectorAll('[alt*=":"][title*=":"]')[0]?.textContent;
   const msgUrl = window.location.href;
-
-  console.log("from scraper url, subject, sender, ", msgUrl, subject, sender);
 
   return {
     sender,
