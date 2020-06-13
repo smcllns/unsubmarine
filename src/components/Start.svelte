@@ -38,45 +38,57 @@
       });
     });
   }
+
+  let imgSrc = chrome.runtime.getURL("images/icon-unsubmarine-round.png");
 </script>
 
-<Dialog
-  title="Welcome to Unsubmarine"
-  subtitle="Automating unsubscribe for gmail">
+<Dialog>
+
+  <header class="pb-8 mx-auto max-w-lg text-center">
+    <img src={imgSrc} width="48px" height="auto" class="mx-auto pb-2" />
+    <h1 class="text-3xl font-bold">Welcome to Unsubmarine</h1>
+    <p>Unsubscribe automation for gmail while preserving privacy</p>
+  </header>
 
   <div class="max-w-lg">
     <div
       class="Btn Secondary p-4 mb-4"
       on:click|preventDefault={handleStandardMode}>
-      <h3 class="text-lg font-semibold">Standard mode</h3>
+      <h3 class="text-lg font-semibold">Standard Mode</h3>
       <p class="font-normal">
-        Run on recent emails likely to have unsubscribe links.
-        <span class="font-tomato">Recommended</span>
-        if trying out Unsubmarine for the first time.
+        Run on recent emails likely to have unsubscribe links
+        <br />
+        (recommended for test driving)
       </p>
     </div>
 
     <div
       class="Btn Secondary p-4 mb-4"
       on:click|preventDefault={handleAdvancedMode}>
-      <h3 class="text-lg font-semibold">Custom mode</h3>
-      <p class="font-normal">Run on the message list in current view</p>
+      <h3 class="text-lg font-semibold">Custom Mode</h3>
+      <p class="font-normal">
+        Run on the search results/messages currently displayed
+      </p>
     </div>
 
     <div
       class="Btn Secondary p-4 mb-4"
       on:click|preventDefault={e => alert('Coming soon!')}>
       <h3 class="text-lg font-semibold">Buy full version ($1.99)</h3>
-      <p class="font-normal">
-        Increase search limit from 10 to 1000, set search options, and help me
-        understand how many people will pay for inbox automation :)
-      </p>
+      <ul class="font-normal">
+        <li>Increase unsubscribe limit from 5 to 100</li>
+        <li>Unlock Custom Mode to run on any search/message list</li>
+        <li>Support bug fixes and enhancements</li>
+      </ul>
     </div>
 
-    <p class="mb-4">
-      Read more about my thinking making automation for something as sensitive
-      as an inbox. (TLDR: Strictly no email data leaves your browser, but that
-      limits what features are possible.)
+    <p class="mb-4 text-center">
+      <a href="//smcllns.com" target="_blank">
+        Read more about how this works.
+      </a>
+      <br />
+      TLDR: Strictly no email data leaves your browser, but that limits what
+      features are possible.
     </p>
   </div>
 </Dialog>

@@ -11,10 +11,12 @@
     text-black rounded-lg pointer-events-auto relative">
     <span on:click|preventDefault={cancel} class="Dialog__Close">&#x2716;</span>
 
-    <header class="pb-12 mx-auto max-w-lg text-center">
-      <h1 class="text-3xl font-bold">{title}</h1>
-      <p>{subtitle}</p>
-    </header>
+    {#if title}
+      <header class="pb-8 mx-auto max-w-lg text-center">
+        <h1 class="text-3xl font-bold">{title}</h1>
+        <p>{subtitle}</p>
+      </header>
+    {/if}
 
     <slot />
 

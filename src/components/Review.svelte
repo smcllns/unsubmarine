@@ -76,6 +76,11 @@
       </tr>
     </thead>
     <tbody>
+      {#if displayedResults.length === 0}
+        <tr>
+          <td colspan="5" class="text-center">No results to display</td>
+        </tr>
+      {/if}
       {#each displayedResults as emailsBySender, i}
         <tr class="align-top hover:bg-gray-200">
           <td class="text-center">
