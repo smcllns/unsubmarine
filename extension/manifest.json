@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Unsubmarine",
   "version": "0.2.0",
-  "description": "Automated unsubscribe in gmail while preserving your privacy",
+  "description": "Automated Unsubscribe for Gmail with Total Privacy",
   "homepage": "https://smcllns.com/memo/unsubmarine?ref=crxwebstore",
   "content_scripts": [
     {
