@@ -26,8 +26,8 @@
   }
 
   function handleReviewFinish() {
-    if (selectedResults.length > 1) {
-      const urls = selectedResults.map(r => r[0].unsubLink);
+    const urls = selectedResults.map(r => r[0].unsubLink);
+    if (selectedResults.length > 0) {
       handleLaunchUrls(urls);
     }
     cancel();
