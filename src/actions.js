@@ -12,6 +12,7 @@ export function handleExtensionClick() {
   document.removeEventListener("keyup", handleShortcutKeys);
   document.addEventListener("keyup", handleShortcutKeys);
   viewState.moveToNextView("start");
+  console.log("extension click");
 }
 
 export function start() {

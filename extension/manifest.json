@@ -19,7 +19,9 @@
     "content/bundle.*",
     "images/*.png"
   ],
-  "browser_action": {
+  "permissions": ["declarativeContent"],
+  "page_action": {
+    "default_title": "Run Unsubmarine in Gmail",
     "default_icon": { "16": "images/icon16.png", "32": "images/icon32.png" }
   },
   "icons": {

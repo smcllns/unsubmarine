@@ -1,6 +1,10 @@
 <style global>
   @tailwind base;
 
+  #unsubmarine {
+    @apply font-sans;
+  }
+
   a {
     color: blue;
     text-decoration: underline;

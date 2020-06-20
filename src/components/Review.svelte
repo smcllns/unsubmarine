@@ -11,17 +11,16 @@
 
   $: selectedResults = displayedResults.filter(r => r.checked);
 
-  function handleLaunchUrl(url) {
-    chrome.runtime.sendMessage({ message: "open_new_tab", url });
+  function handleLaunchUrls(urls) {
+    // urls should be an array of url strings
+    chrome.runtime.sendMessage({ message: "open_new_tabs", urls });
   }
 
   function handleReviewFinish() {
-    selectedResults.length > 0
-      ? chrome.runtime.sendMessage({
-          message: "open_new_tabs",
-          urls: selectedResults.map(r => r[0].unsubLink)
-        })
-      : console.log("no actionable results to open");
+    if (selectedResults.length > 1) {
+      const urls = selectedResults.map(r => r[0].unsubLink);
+      handleLaunchUrls(urls);
+    }
     cancel();
   }
 
@@ -102,7 +101,7 @@
               {#each emailsBySender as email}
                 <a
                   href={email.url}
-                  on:click|preventDefault={e => handleLaunchUrl(email.url)}>
+                  on:click|preventDefault={e => handleLaunchUrls([email.url])}>
                   {email.subject}
                 </a>
                 <br />
