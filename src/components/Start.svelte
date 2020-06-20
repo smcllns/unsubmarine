@@ -51,7 +51,7 @@
       height="auto"
       class="mx-auto pb-2" />
     <h1 class="text-3xl font-bold">Unsubmarine</h1>
-    <p>Automated unsubscribe in gmail with total privacy*</p>
+    <p>Automated Unsubscribe for Gmail with Total Privacy*</p>
   </header>
 
   <div class="max-w-lg">
