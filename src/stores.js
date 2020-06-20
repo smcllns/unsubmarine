@@ -30,4 +30,4 @@ export const viewState = createViewState();
 export const processedEmailCount = writable(0);
 export const actionableResults = writable([]);
 export const killSwitchOn = writable(false);
-export const userLimit = writable(5);
+export const userLimit = writable(10);

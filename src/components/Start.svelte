@@ -41,7 +41,7 @@
   }
 </script>
 
-<Dialog>
+<Dialog title={false} subtitle={false}>
 
   <header class="pb-8 mx-auto max-w-lg text-center">
     <img
@@ -78,7 +78,7 @@
     <!-- <div
       class="Btn Secondary p-4 mb-4"
       on:click|preventDefault={e => alert('Coming soon!')}>
-      <h3 class="text-lg font-semibold">Buy full version ($1.99)</h3>
+      <h3 class="text-lg font-semibold">Buy full version ($2.00)</h3>
       <ul class="font-normal">
         <li>Increase unsubscribe limit from 5 to 100</li>
         <li>Unlock Custom Mode to run on any search/message list</li>

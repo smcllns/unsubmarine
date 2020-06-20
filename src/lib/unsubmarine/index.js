@@ -7,40 +7,36 @@ import {
 import { waitForGmailPageChangeOnce } from "./observers";
 
 export default class Unsubmarine {
-  constructor(limit = 3) {
+  constructor() {
     this.killSwitch = false;
-    this.unsubLimit = limit;
-    this.unsubCount;
     this.prevRun;
   }
 
   async *start() {
     this.prevRun = undefined;
-    this.unsubCount = 0;
 
     while (true) {
-      if (this.killSwitch) return { log: "stop" };
+      if (this.killSwitch) return;
 
-      const result = await this.run();
-      this.prevRun = result;
-
-      if (result.skipIncrement) continue;
-
-      if (result.stopped) return { ...result, log: "stop" };
-
-      if (this.unsubCount >= this.unsubLimit) {
-        console.log("hit unsubLimit", this.unsubCount, this.unsubLimit);
-        return { ...result, log: "completed" };
+      let result;
+      try {
+        result = await this.run();
+      } catch (err) {
+        console.log("err");
+        return;
       }
 
-      yield { ...result, log: "yield" };
+      if (result.skipIncrement) continue;
+      if (result.stopped) return;
+      yield result;
+
+      this.prevRun = result;
     }
   }
 
   async run() {
     console.log("started run()");
     return new Promise(async (resolve, reject) => {
-      if (this.killSwitch) resolve({ stopped: true });
       if (isListView()) {
         let l = scrapeListMeta();
         l.firstItem.click();
@@ -48,18 +44,21 @@ export default class Unsubmarine {
         return resolve({ skipIncrement: true });
       }
 
-      let m = scrapeMessageMeta();
-      if (m.url === this.prevRun?.m?.url) {
-        return resolve({ stopped: true });
-      }
+      if (isMessageView()) {
+        let m = scrapeMessageMeta();
 
-      if (m.nextBtn) {
-        m.nextBtn.click();
-        await waitForGmailPageChangeOnce();
-      }
+        if (m.url === this.prevRun?.url) {
+          return resolve({ stopped: true });
+        }
 
-      if (m.unsubLink) this.unsubCount++;
-      resolve({ ...m });
+        if (m.nextBtn) {
+          m.nextBtn.click();
+          await waitForGmailPageChangeOnce();
+        }
+
+        return resolve(m);
+      }
+      reject();
     });
   }
 }

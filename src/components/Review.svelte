@@ -2,7 +2,8 @@
   import Dialog from "./Dialog.svelte";
   import { actionableResults } from "../stores";
   import { cancel } from "../actions";
-  let displayedResults, selectedResults;
+  let displayedResults = [],
+    selectedResults = [];
 
   $: displayedResults = groupResultsBySender($actionableResults).map(r => {
     r.checked = true;
@@ -10,6 +11,14 @@
   });
 
   $: selectedResults = displayedResults.filter(r => r.checked);
+
+  $: dynamicSubtitle = `Found ${displayedResults.length} ${
+    displayedResults.length === 1 ? "email" : "emails"
+  } with unsubscribe links. ${
+    displayedResults.length > 0
+      ? "<br/>Confirm which unsubscribe links you want to launch."
+      : ""
+  }`;
 
   function handleLaunchUrls(urls) {
     // urls should be an array of url strings
@@ -55,9 +64,7 @@
     /\((.*)\)/.test(str) ? str.match(/\((.*)\)/)[1] : "";
 </script>
 
-<Dialog
-  title="Confirm Unsubscribes"
-  subtitle="Select which emails to unsubscribe from">
+<Dialog title="Confirm Unsubscribes" subtitle={dynamicSubtitle}>
 
   <table>
     <thead class="font-bold border-b border-gray-300">

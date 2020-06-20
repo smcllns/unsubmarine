@@ -8,10 +8,12 @@
     class="flex justify-between items-center py-4 px-6 mx-8 rounded-t-lg
     bg-black text-white pointer-events-auto">
     <div class="text-sm">
-      <p class="font-bold">Searching for unsubscribe links...</p>
+      <p class="font-bold font-tomato">
+        Looking for emails with unsubscribe links...
+      </p>
       <p>
-        {$processedEmailCount} email searched; {$actionableResults.length}
-        unsubscribe links found
+        Clicked through {$processedEmailCount} emails; collected {$actionableResults.length}
+        unsubscribe links
       </p>
     </div>
     <span class="Btn Primary" on:click|preventDefault={stop}>Finish</span>

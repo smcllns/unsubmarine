@@ -9,12 +9,16 @@
   <div
     class="Dialog flex flex-col justify-center px-4 md:px-16 py-8 m-4 bg-white
     text-black rounded-lg pointer-events-auto relative">
-    <span on:click|preventDefault={cancel} class="Dialog__Close">&#x2716;</span>
+
+    <div class="Dialog__Shadow" />
+    <div class="Dialog__Close" on:click|preventDefault={cancel}>&#x2716;</div>
 
     {#if title}
       <header class="pb-8 mx-auto max-w-lg text-center">
         <h1 class="text-3xl font-bold">{title}</h1>
-        <p>{subtitle}</p>
+        <p>
+          {@html subtitle}
+        </p>
       </header>
     {/if}
 
@@ -25,8 +29,9 @@
 
 <style>
   .Dialog {
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.12),
-      0 4px 4px rgba(0, 0, 0, 0.16), 0 8px 8px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.12),
+      0 4px 4px rgba(0, 0, 0, 0.16), 0 8px 8px rgba(0, 0, 0, 0.2); */
+    position: relative;
   }
   .Dialog__Container {
     background: rgb(0, 0, 0);
@@ -35,6 +40,16 @@
       rgba(0, 0, 0, 0.5) 33%,
       rgba(0, 0, 0, 0.9) 100%
     );
+  }
+  .Dialog__Shadow {
+    position: absolute;
+    background: #fff;
+    bottom: 0;
+    width: 80%;
+    left: 10%;
+    height: 5rem;
+    box-shadow: 0 20px 20px 20px rgba(0, 0, 0, 0.5);
+    z-index: -1;
   }
   .Dialog__Close {
     position: absolute;
@@ -47,5 +62,9 @@
     justify-content: center;
     align-items: center;
     border-radius: 100rem;
+    opacity: 0.7;
+  }
+  .Dialog__Close:hover {
+    opacity: 1;
   }
 </style>

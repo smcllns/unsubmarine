@@ -12,7 +12,6 @@ export function handleExtensionClick() {
   document.removeEventListener("keyup", handleShortcutKeys);
   document.addEventListener("keyup", handleShortcutKeys);
   viewState.moveToNextView("start");
-  console.log("extension click");
 }
 
 export function start() {
@@ -49,7 +48,7 @@ async function runUnsubmarine() {
     (status) => (unsubmarine.killSwitch = status)
   );
 
-  for await (const result of unsubmarine.run()) {
+  for await (const result of unsubmarine.start()) {
     processedEmailCount.update((n) => n + 1);
 
     if (result.unsubLink) {
@@ -67,14 +66,15 @@ async function runUnsubmarine() {
     );
 
     if (result.error || unsubmarine.killSwitch) {
-      stop();
+      console.log("hitting stop due to error/killswitch");
       break;
     }
 
     if (unsubCount >= maxUnsubCount) {
-      stop();
+      console.log("hitting stop due to max limit hit");
       break;
     }
   }
   unlistenKillSwitch();
+  stop();
 }

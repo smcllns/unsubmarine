@@ -28,8 +28,8 @@
     color: #fff;
   }
   .Btn.Secondary {
-    border: 2px solid #000;
-    background: #fff;
+    /* border: 2px solid #000; */
+    @apply bg-gray-200;
     color: #000;
   }
   .Btn.Tertiary {
@@ -44,7 +44,9 @@
   .Btn:active {
     top: 1px;
   }
-  .Btn.Secondary:hover,
+  .Btn.Secondary:hover {
+    @apply bg-gray-300;
+  }
   .Btn.Tertiary:hover {
     @apply bg-gray-200;
   }
