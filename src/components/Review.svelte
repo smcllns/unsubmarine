@@ -5,18 +5,18 @@
   let displayedResults = [],
     selectedResults = [];
 
-  $: displayedResults = groupResultsBySender($actionableResults).map(r => {
+  $: displayedResults = groupResultsBySender($actionableResults).map((r) => {
     r.checked = true;
     return r;
   });
 
-  $: selectedResults = displayedResults.filter(r => r.checked);
+  $: selectedResults = displayedResults.filter((r) => r.checked);
 
   $: dynamicSubtitle = `Found ${displayedResults.length} ${
     displayedResults.length === 1 ? "email" : "emails"
   } with unsubscribe links. ${
     displayedResults.length > 0
-      ? "(The current version of Unsubmarine stops after finding first 10 links). <a href='mailto:oscollins+unsubmarine@gmail.com' target='_blank'>Share feedback</a>"
+      ? "(The current version of Unsubmarine stops after finding first 10 links)"
       : ""
   }`;
 
@@ -26,7 +26,7 @@
   }
 
   function handleReviewFinish() {
-    const urls = selectedResults.map(r => r[0].unsubLink);
+    const urls = selectedResults.map((r) => r[0].unsubLink);
     if (selectedResults.length > 0) {
       handleLaunchUrls(urls);
     }
@@ -96,7 +96,7 @@
                 checked={emailsBySender.checked}
                 id={`i-${i}`}
                 name={`i-${i}`}
-                on:change={e => handleCheckboxChange(i)} />
+                on:change={(e) => handleCheckboxChange(i)} />
             </label>
           </td>
           <td>
@@ -108,7 +108,9 @@
               {#each emailsBySender as email}
                 <a
                   href={email.url}
-                  on:click|preventDefault={e => handleLaunchUrls([email.url])}>
+                  on:click|preventDefault={(e) => handleLaunchUrls([
+                      email.url,
+                    ])}>
                   {email.subject}
                 </a>
                 <br />

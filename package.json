@@ -1,5 +1,6 @@
 {
   "name": "unsubmarine",
+  "private": true,
   "description": "Hacking an auto-unsubscribe into gmail",
   "repository": {
     "type": "git",
