@@ -4,11 +4,11 @@
   import { start, hideUI } from "../actions";
   let imgSrc = chrome.runtime.getURL("images/icon128.png");
 
-  const handleAdvancedMode = e => {
+  const handleStandardMode = e => {
     start();
   };
 
-  const handleStandardMode = async e => {
+  const handleTestPilotMode = async e => {
     hideUI();
     await navigateToSearchPageAnimatedly();
     start();
@@ -43,7 +43,7 @@
 
 <Dialog title={false} subtitle={false}>
 
-  <header class="pb-8 mx-auto max-w-lg text-center">
+  <header class="pb-2 mx-auto max-w-lg text-center">
     <img
       alt="unsubmarine logo"
       src={imgSrc}
@@ -51,47 +51,53 @@
       height="auto"
       class="mx-auto pb-2" />
     <h1 class="text-3xl font-bold">Unsubmarine</h1>
-    <p>Automated Unsubscribe for Gmail with Total Privacy*</p>
+    <p>Automating unsubscribe for Gmail.</p>
   </header>
 
   <div class="max-w-lg">
+
+    <p class="py-4 text-center">
+      Choose an option to begin finding emails to unsubscribe from:
+    </p>
+
     <div
       class="Btn Secondary p-4 mb-4"
       on:click|preventDefault={handleStandardMode}>
-      <h3 class="text-lg font-semibold">Start in Standard Mode</h3>
+      <h3 class="text-lg font-semibold">Start Unsubmarine</h3>
       <p class="font-normal">
-        Run on recent emails likely to have unsubscribe links. Recommended for a
-        first-time test drive.
+        Search currently visible message list for unsubscribe links.
       </p>
     </div>
 
     <div
       class="Btn Secondary p-4 mb-4"
-      on:click|preventDefault={handleAdvancedMode}>
-      <h3 class="text-lg font-semibold">Start in Custom Mode</h3>
-      <p class="font-normal">
-        Run on the search results/messages currently displayed. Useful for
-        running on custom searches.
-      </p>
+      on:click|preventDefault={handleTestPilotMode}>
+      <h3 class="text-lg font-semibold">Test Drive</h3>
+      <p class="font-normal">First time trying Unsubmarine? Try this one.</p>
     </div>
 
-    <!-- <div
-      class="Btn Secondary p-4 mb-4"
-      on:click|preventDefault={e => alert('Coming soon!')}>
-      <h3 class="text-lg font-semibold">Buy full version ($2.00)</h3>
-      <ul class="font-normal">
-        <li>Increase unsubscribe limit from 5 to 100</li>
-        <li>Unlock Custom Mode to run on any search/message list</li>
-        <li>Support bug fixes and enhancements</li>
-      </ul>
-    </div> -->
-
-    <p class="py-4 text-center text-sm">
-      * Designed to run in the most sensitive inboxes. No data ever leaves your
-      browser&mdash;this automation is all local.
-      <a href="//smcllns.com/memo/unsubmarine?ref=svelte" target="_blank">
-        Read blog post for more.
+    <p class="pt-6 text-sm">
+      Designed to be helpful with privacy and security in mind. Feature
+      requests/bugs on
+      <a href="https://github.com/smcllns/unsubmarine/issues">
+        github issue tracker.
+      </a>
+      For any feedback/discussion, email me: oscollins@gmail.com or DM on
+      twitter
+      <a href="https://twitter.com/smcllns">@smcllns.</a>
+      All code is
+      <a href="https://github.com/smcllns/unsubmarine">open source.</a>
+      Read more about why I made this
+      <a href="//smcllns.com/unsubmarine?ref=svelte" target="_blank">
+        in blog post.
       </a>
     </p>
+
   </div>
 </Dialog>
+
+<style>
+  p {
+    max-width: 30rem;
+  }
+</style>

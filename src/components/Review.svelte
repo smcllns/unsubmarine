@@ -16,7 +16,7 @@
     displayedResults.length === 1 ? "email" : "emails"
   } with unsubscribe links. ${
     displayedResults.length > 0
-      ? "<br/>Confirm which unsubscribe links you want to launch."
+      ? "(The current version of Unsubmarine stops after finding first 10 links). <a href='mailto:oscollins+unsubmarine@gmail.com' target='_blank'>Share feedback</a>"
       : ""
   }`;
 
