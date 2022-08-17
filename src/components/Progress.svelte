@@ -19,12 +19,3 @@
     <span class="Btn Primary" on:click|preventDefault={stop}>Finish</span>
   </div>
 </div>
-
-<style>
-  .Btn.Tertiary {
-    color: #fff;
-  }
-  .Btn.Tertiary:hover {
-    color: #000;
-  }
-</style>

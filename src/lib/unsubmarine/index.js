@@ -4,7 +4,7 @@ import {
   scrapeListMeta,
   scrapeMessageMeta,
 } from "./scraper.js";
-import { waitForGmailPageChangeOnce } from "./observers";
+import { waitForGmailPageChangeOnce } from "./observers.js";
 
 export default class Unsubmarine {
   constructor() {

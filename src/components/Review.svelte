@@ -144,7 +144,7 @@
 
 <style>
   td {
-    @apply whitespace-no-wrap p-1 overflow-x-hidden;
+    /* @apply whitespace-no-wrap p-1 overflow-x-hidden; */
     text-overflow: ellipsis;
     max-width: min(20rem, 30vw);
   }
