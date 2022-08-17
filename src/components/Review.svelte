@@ -14,11 +14,7 @@
 
   $: dynamicSubtitle = `Found ${displayedResults.length} ${
     displayedResults.length === 1 ? "email" : "emails"
-  } with unsubscribe links. ${
-    displayedResults.length > 0
-      ? "(The current version of Unsubmarine stops after finding first 10 links)"
-      : ""
-  }`;
+  } with unsubscribe links. Click Unsubscribe to open links in new tabs and confirm any remaining unsubscribe steps.`;
 
   function handleLaunchUrls(urls) {
     // urls should be an array of url strings
@@ -64,82 +60,78 @@
     /\((.*)\)/.test(str) ? str.match(/\((.*)\)/)[1] : "";
 </script>
 
-<Dialog title="Confirm Unsubscribes" subtitle={dynamicSubtitle}>
-
-  <table>
-    <thead class="font-bold border-b border-gray-300">
-      <tr>
-        <td class="text-center">
-          <input
-            type="checkbox"
-            checked={true}
-            on:change={handleCheckedAllChange} />
-        </td>
-        <td>From</td>
-        <td>#</td>
-        <td>Messages</td>
-        <td>When</td>
-      </tr>
-    </thead>
-    <tbody>
-      {#if displayedResults.length === 0}
+<Dialog title="Confirm &amp; Unsubscribe" subtitle={dynamicSubtitle}>
+  <div class="max-h-96 overflow-y-auto">
+    <table class="w-full">
+      <thead class="font-bold border-b border-gray-300">
         <tr>
-          <td colspan="5" class="text-center">No results to display</td>
-        </tr>
-      {/if}
-      {#each displayedResults as emailsBySender, i}
-        <tr class="align-top hover:bg-gray-200">
           <td class="text-center">
-            <label for={`i-${i}`} class="px-2">
-              <input
-                type="checkbox"
-                checked={emailsBySender.checked}
-                id={`i-${i}`}
-                name={`i-${i}`}
-                on:change={(e) => handleCheckboxChange(i)} />
-            </label>
+            <input
+              type="checkbox"
+              checked={true}
+              on:change={handleCheckedAllChange}
+            />
           </td>
-          <td>
-            <label for={`i-${i}`}>{emailsBySender[0].sender}</label>
-          </td>
-          <td>{emailsBySender.length}</td>
-          <td>
-            <label for={`i-${i}`}>
-              {#each emailsBySender as email}
-                <a
-                  href={email.url}
-                  on:click|preventDefault={(e) => handleLaunchUrls([
-                      email.url,
-                    ])}>
-                  {email.subject}
-                </a>
-                <br />
-              {/each}
-            </label>
-          </td>
-          <td>
-            {#each emailsBySender as email}
-              {prettyTimestamp(email.when)}
-              <br />
-            {/each}
-          </td>
+          <td>Unsubscribe Links</td>
         </tr>
-      {/each}
-    </tbody>
-  </table>
-
-  <div class="flex justify-between items center pt-8">
+      </thead>
+      <tbody>
+        {#if displayedResults.length === 0}
+          <tr>
+            <td colspan="5" class="text-center">No results to display</td>
+          </tr>
+        {/if}
+        {#each displayedResults as emailsBySender, i}
+          <tr class="align-top hover:bg-gray-200">
+            <td class="text-center">
+              <label for={`i-${i}`} class="px-2">
+                <input
+                  type="checkbox"
+                  checked={emailsBySender.checked}
+                  id={`i-${i}`}
+                  name={`i-${i}`}
+                  on:change={(e) => handleCheckboxChange(i)}
+                />
+              </label>
+            </td>
+            <td>
+              <label for={`i-${i}`}>{emailsBySender[0].sender}</label>
+              <!-- ({emailsBySender.length ||
+                  0}) -->
+              <br />
+              <label for={`i-${i}`}>
+                {#each emailsBySender as email}
+                  &#128231; <a
+                    href={email.url}
+                    on:click|preventDefault={(e) =>
+                      handleLaunchUrls([email.url])}
+                  >
+                    {email.subject}
+                  </a>
+                  {#if prettyTimestamp(email.when).length > 0}
+                    ({prettyTimestamp(email.when)})
+                  {/if}
+                  <br />
+                {/each}
+              </label>
+            </td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  </div>
+  <div class="flex justify-between items center pt-4 border-t border-gray-300">
     <button on:click|preventDefault={cancel} class="Btn Tertiary">
       Cancel
     </button>
     <button
       on:click|preventDefault={handleReviewFinish}
       disabled={selectedResults.length < 1}
-      class="Btn Primary">
+      class="Btn Primary"
+    >
       Unsubscribe ({selectedResults.length})
     </button>
   </div>
-
 </Dialog>
 
 <style>

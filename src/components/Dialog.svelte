@@ -5,16 +5,17 @@
 
 <div
   class="Dialog__Container flex flex-1 flex-col-reverse pointer-events-none
-  items-center justify-center">
+  items-end justify-start"
+>
   <div
-    class="Dialog flex flex-col justify-center px-4 md:px-16 py-8 m-4 bg-white
-    text-black rounded-lg pointer-events-auto relative">
-
+    class="Dialog flex flex-col justify-center p-4 mx-4 bg-white
+    text-black pointer-events-auto relative rounded-t-md w-full max-w-xl"
+  >
     <div class="Dialog__Shadow" />
     <div class="Dialog__Close" on:click|preventDefault={cancel}>&#x2716;</div>
 
     {#if title}
-      <header class="pb-8 mx-auto max-w-lg text-center">
+      <header class="pb-8 mx-auto w-full text-center">
         <h1 class="text-3xl font-bold">{title}</h1>
         <p>
           {@html subtitle}
@@ -23,7 +24,6 @@
     {/if}
 
     <slot />
-
   </div>
 </div>
 

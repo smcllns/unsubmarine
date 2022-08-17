@@ -14,19 +14,19 @@
 </script>
 
 <div id="unsubmarine">
-
-  {#if $viewState === 'start'}
+  {#if $viewState === "start"}
+    <!-- <Progress /> -->
     <Start />
   {/if}
 
-  {#if $viewState === 'progress'}
-    <Progress />
+  {#if $viewState === "progress"}
+    <Review />
+    <!-- <Progress /> -->
   {/if}
 
-  {#if $viewState === 'review'}
+  {#if $viewState === "review"}
     <Review />
   {/if}
-
 </div>
 
 <Tailwindcss />

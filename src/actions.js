@@ -5,7 +5,7 @@ import {
   processedEmailCount,
   viewState,
   killSwitchOn,
-  userLimit,
+  unsubLimit,
 } from "./stores";
 
 export function handleExtensionClick() {
@@ -42,7 +42,7 @@ async function runUnsubmarine() {
   processedEmailCount.set(0);
   actionableResults.set([]);
   killSwitchOn.set(false);
-  const maxUnsubCount = get(userLimit);
+  const maxUnsubCount = get(unsubLimit);
   let unsubCount = 0;
   const unlistenKillSwitch = killSwitchOn.subscribe(
     (status) => (unsubmarine.killSwitch = status)

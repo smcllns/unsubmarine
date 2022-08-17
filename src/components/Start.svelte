@@ -4,11 +4,11 @@
   import { start, hideUI } from "../actions";
   let imgSrc = chrome.runtime.getURL("images/icon128.png");
 
-  const handleStandardMode = e => {
+  const handleStandardMode = (e) => {
     start();
   };
 
-  const handleTestPilotMode = async e => {
+  const handleTestPilotMode = async (e) => {
     hideUI();
     await navigateToSearchPageAnimatedly();
     start();
@@ -42,48 +42,49 @@
 </script>
 
 <Dialog title={false} subtitle={false}>
-
-  <header class="pb-2 mx-auto max-w-lg text-center">
+  <header class="pb-2 mx-auto text-center">
     <img
       alt="unsubmarine logo"
       src={imgSrc}
       width="64px"
       height="auto"
-      class="mx-auto pb-2" />
+      class="mx-auto pb-2"
+    />
     <h1 class="text-3xl font-bold">Unsubmarine</h1>
-    <p>Automating unsubscribe for Gmail.</p>
+    <p>Automating unsubscribe in Gmail.</p>
   </header>
 
-  <div class="max-w-lg">
-
+  <div class="mx-auto">
     <p class="py-4 text-center">
-      Choose an option to begin finding emails to unsubscribe from:
+      No data is shared with any company or external server. Unsubmarine
+      automates your browser clicking through emails and collects the
+      unsubscribe links, so you can batch unsubscribe.
     </p>
 
-    <div
+    <!-- <div
       class="Btn Secondary p-4 mb-4"
-      on:click|preventDefault={handleStandardMode}>
+      on:click|preventDefault={handleStandardMode}
+    >
       <h3 class="text-lg font-semibold">Start Unsubmarine</h3>
       <p class="font-normal">
         Search currently visible message list for unsubscribe links.
       </p>
-    </div>
+    </div> -->
 
     <div
-      class="Btn Secondary p-4 mb-4"
-      on:click|preventDefault={handleTestPilotMode}>
-      <h3 class="text-lg font-semibold">Test Drive</h3>
-      <p class="font-normal">First time trying Unsubmarine? Try this one.</p>
+      class="Btn Primary p-4 mb-4"
+      on:click|preventDefault={handleTestPilotMode}
+    >
+      <h3 class="text-lg font-semibold">Start</h3>
     </div>
 
-    <p class="pt-6 text-sm">
+    <!-- <p class="pt-6 text-sm">
       Designed to be helpful with privacy and security in mind. Feature
       requests/bugs on
       <a href="https://github.com/smcllns/unsubmarine/issues">
         github issue tracker.
       </a>
-      For any feedback/discussion, email me: oscollins@gmail.com or DM on
-      twitter
+      For any feedback/discussion, email me: oscollins@gmail.com or DM on twitter
       <a href="https://twitter.com/smcllns">@smcllns.</a>
       All code is
       <a href="https://github.com/smcllns/unsubmarine">open source.</a>
@@ -91,13 +92,6 @@
       <a href="//smcllns.com/unsubmarine?ref=svelte" target="_blank">
         in blog post.
       </a>
-    </p>
-
+    </p> -->
   </div>
 </Dialog>
-
-<style>
-  p {
-    max-width: 30rem;
-  }
-</style>
