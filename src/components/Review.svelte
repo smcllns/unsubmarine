@@ -1,7 +1,10 @@
 <script>
   import Dialog from "./Dialog.svelte";
-  import { actionableResults } from "../stores";
-  import { cancel } from "../actions";
+  import { actionableResults, viewState } from "../stores";
+  import { start, stop, cancel } from "../actions";
+
+  let imgSrc = chrome.runtime.getURL("images/icon128.png");
+
   let displayedResults = [],
     selectedResults = [];
 
@@ -26,7 +29,7 @@
     if (selectedResults.length > 0) {
       handleLaunchUrls(urls);
     }
-    cancel();
+    // cancel();
   }
 
   function groupResultsBySender(resultsArr) {
@@ -60,9 +63,9 @@
     /\((.*)\)/.test(str) ? str.match(/\((.*)\)/)[1] : "";
 </script>
 
-<Dialog title="Confirm &amp; Unsubscribe" subtitle={dynamicSubtitle}>
-  <div class="max-h-96 overflow-y-auto">
-    <table class="w-full">
+<Dialog>
+  <div class="overflow-y-auto">
+    <table class="w-full my-4">
       <thead class="font-bold border-b border-gray-300">
         <tr>
           <td class="text-center">
@@ -72,7 +75,10 @@
               on:change={handleCheckedAllChange}
             />
           </td>
-          <td>Unsubscribe Links</td>
+          <td />
+          <td
+            >Senders with Unsubscribe Links ({displayedResults.length || 0})</td
+          >
         </tr>
       </thead>
       <tbody>
@@ -94,8 +100,11 @@
                 />
               </label>
             </td>
+            <td class="text-gray-400">{i + 1}.</td>
             <td>
-              <label for={`i-${i}`}>{emailsBySender[0].sender}</label>
+              <label for={`i-${i}`} class="font-bold"
+                >{emailsBySender[0].sender}</label
+              >
               <!-- ({emailsBySender.length ||
                   0}) -->
               <br />
@@ -120,16 +129,28 @@
       </tbody>
     </table>
   </div>
-  <div class="flex justify-between items center pt-4 border-t border-gray-300">
-    <button on:click|preventDefault={cancel} class="Btn Tertiary">
-      Cancel
-    </button>
+  <div class="flex justify-between items-center pt-4 border-t border-gray-300">
+    {#if $viewState === "progress"}
+      <button class="Btn Tertiary" on:click|capture|preventDefault={stop}
+        >Cancel</button
+      >
+      <!-- {:else}
+      <button class="Btn Tertiary" on:click|capture|preventDefault={start}
+        >Resume</button
+      > -->
+    {/if}
+    {#if $viewState === "review"}
+      <button class="Btn Tertiary" on:click|capture|preventDefault={cancel}
+        >Quit</button
+      >
+    {/if}
+
     <button
       on:click|preventDefault={handleReviewFinish}
       disabled={selectedResults.length < 1}
       class="Btn Primary"
     >
-      Unsubscribe ({selectedResults.length})
+      Click {selectedResults.length} Unsubscribe Links
     </button>
   </div>
 </Dialog>
@@ -138,7 +159,9 @@
   td {
     /* @apply whitespace-no-wrap p-1 overflow-x-hidden; */
     text-overflow: ellipsis;
-    max-width: min(20rem, 30vw);
+    /* width: 100%; */
+    padding: 0.5rem 0;
+    /* max-width: min(20rem, 30vw); */
   }
   tbody:before {
     content: "\a0";

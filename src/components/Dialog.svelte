@@ -1,6 +1,6 @@
 <script>
   import { cancel } from "../actions";
-  export let title, subtitle;
+  let imgSrc = chrome.runtime.getURL("images/icon128.png");
 </script>
 
 <div
@@ -14,14 +14,17 @@
     <div class="Dialog__Shadow" />
     <div class="Dialog__Close" on:click|preventDefault={cancel}>&#x2716;</div>
 
-    {#if title}
-      <header class="pb-8 mx-auto w-full text-center">
-        <h1 class="text-3xl font-bold">{title}</h1>
-        <p>
-          {@html subtitle}
-        </p>
-      </header>
-    {/if}
+    <header class="pb-2 mx-auto text-center">
+      <img
+        alt="unsubmarine logo"
+        src={imgSrc}
+        width="64px"
+        height="auto"
+        class="mx-auto pb-2"
+      />
+      <h1 class="text-3xl font-bold">Unsubmarine</h1>
+      <p>Bulk unsubscribe in gmail</p>
+    </header>
 
     <slot />
   </div>
@@ -32,6 +35,7 @@
     /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.12),
       0 4px 4px rgba(0, 0, 0, 0.16), 0 8px 8px rgba(0, 0, 0, 0.2); */
     position: relative;
+    max-height: 98vh;
   }
   .Dialog__Container {
     background: rgb(0, 0, 0);

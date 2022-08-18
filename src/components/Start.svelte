@@ -2,7 +2,6 @@
   import Dialog from "./Dialog.svelte";
   import { waitForGmailPageChangeOnce } from "../lib/unsubmarine/observers";
   import { start, hideUI } from "../actions";
-  let imgSrc = chrome.runtime.getURL("images/icon128.png");
 
   const handleStandardMode = (e) => {
     start();
@@ -41,24 +40,26 @@
   }
 </script>
 
-<Dialog title={false} subtitle={false}>
-  <header class="pb-2 mx-auto text-center">
-    <img
-      alt="unsubmarine logo"
-      src={imgSrc}
-      width="64px"
-      height="auto"
-      class="mx-auto pb-2"
-    />
-    <h1 class="text-3xl font-bold">Unsubmarine</h1>
-    <p>Automating unsubscribe in Gmail.</p>
-  </header>
-
+<Dialog>
   <div class="mx-auto">
     <p class="py-4 text-center">
-      No data is shared with any company or external server. Unsubmarine
-      automates your browser clicking through emails and collects the
-      unsubscribe links, so you can batch unsubscribe.
+      Unsubmarine automates the process of clicking through emails to find
+      unsubscribe links, and presents them in one list so you can choose what to
+      bulk unsubscribe from.
+    </p>
+    <div
+      class="Btn Primary p-4 mb-4"
+      on:click|preventDefault={handleTestPilotMode}
+    >
+      <h3 class="text-lg font-semibold">Start Search</h3>
+    </div>
+
+    <p class="pb-4 text-sm">
+      Unsubmarine is an open source client-only browser extension so your data
+      doesn't leave your browser, and it has no persistent storage so it doesn't
+      remember anything after a page refresh. It does nothing until you click
+      Start. <a href="https://github.com/smcllns/unsubmarine">Code on github</a
+      >.
     </p>
 
     <!-- <div
@@ -70,13 +71,6 @@
         Search currently visible message list for unsubscribe links.
       </p>
     </div> -->
-
-    <div
-      class="Btn Primary p-4 mb-4"
-      on:click|preventDefault={handleTestPilotMode}
-    >
-      <h3 class="text-lg font-semibold">Start</h3>
-    </div>
 
     <!-- <p class="pt-6 text-sm">
       Designed to be helpful with privacy and security in mind. Feature

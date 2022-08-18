@@ -1,7 +1,6 @@
 <script>
   import Start from "./Start.svelte";
   import Review from "./Review.svelte";
-  import Progress from "./Progress.svelte";
   import Tailwindcss from "./Tailwindcss.svelte";
 
   import { viewState } from "../stores";
@@ -21,7 +20,6 @@
 
   {#if $viewState === "progress"}
     <Review />
-    <!-- <Progress /> -->
   {/if}
 
   {#if $viewState === "review"}
