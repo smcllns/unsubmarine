@@ -23,7 +23,7 @@
         class="mx-auto pb-2"
       />
       <h1 class="text-3xl font-bold">Unsubmarine</h1>
-      <p>Bulk unsubscribe in gmail</p>
+      <p>Bulk Unsubscribe in Gmail</p>
     </header>
 
     <slot />

@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "Unsubmarine",
-  "version": "0.2.3",
-  "description": "Automated Unsubscribe for Gmail with Total Privacy",
+  "version": "0.3.0",
+  "description": "Bulk Unsubscribe in Gmail",
   "homepage": "https://smcllns.com/unsubmarine?ref=crxwebstore",
   "content_scripts": [
     {
