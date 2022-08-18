@@ -1,3 +1,4 @@
 /node_modules/
 /extension/content/bundle.*
+/extension/extension.zip
 .DS_Store
