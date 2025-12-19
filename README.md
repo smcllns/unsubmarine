@@ -22,6 +22,10 @@ The only runtime dependency is babel for es6. There is a small amount of home-ro
 1. Build files for extension: `npm run build`
 1. After building, distribute/install the `/extension` directory
 
+## Known Limitations
+
+- Split/side view mode is not yet supported (extension works when reading pane is disabled)
+
 ## License
 
 [MIT](https://en.wikipedia.org/wiki/Comparison_of_free_and_open-source_software_licences#:~:text=MIT)
