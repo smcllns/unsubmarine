@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Unsubmarine",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Bulk Unsubscribe in Gmail",
   "homepage_url": "https://smcllns.com/unsubmarine?ref=crxwebstore",
   "content_scripts": [
@@ -20,7 +20,7 @@
       "matches": ["https://mail.google.com/*"]
     }
   ],
-  "permissions": ["tabs"],
+  "permissions": ["declarativeContent"],
   "host_permissions": ["https://mail.google.com/*"],
   "action": {
     "default_title": "Run Unsubmarine in Gmail",
