@@ -1,31 +1,21 @@
 // Unsubmarine Service Worker (Manifest V3)
 
-// Enable action only for mail.google.com
+// Enable action only for mail.google.com using declarativeContent
 chrome.runtime.onInstalled.addListener(() => {
-  // Disable the action by default
   chrome.action.disable();
-});
 
-// Enable/disable action based on the current tab URL
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (tab.url && tab.url.includes("mail.google.com")) {
-    chrome.action.enable(tabId);
-  } else {
-    chrome.action.disable(tabId);
-  }
-});
-
-chrome.tabs.onActivated.addListener(async (activeInfo) => {
-  try {
-    const tab = await chrome.tabs.get(activeInfo.tabId);
-    if (tab.url && tab.url.includes("mail.google.com")) {
-      chrome.action.enable(activeInfo.tabId);
-    } else {
-      chrome.action.disable(activeInfo.tabId);
-    }
-  } catch (e) {
-    // Tab may not exist or be accessible
-  }
+  chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
+    chrome.declarativeContent.onPageChanged.addRules([
+      {
+        conditions: [
+          new chrome.declarativeContent.PageStateMatcher({
+            pageUrl: { hostSuffix: "mail.google.com" },
+          }),
+        ],
+        actions: [new chrome.declarativeContent.ShowAction()],
+      },
+    ]);
+  });
 });
 
 // Pass message to content scripts on extension click
