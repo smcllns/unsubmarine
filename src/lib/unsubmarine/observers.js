@@ -23,4 +23,30 @@ const waitForGmailPageChangeOnce = () => {
   });
 };
 
-export { waitForGmailPageChangeOnce };
+const waitForListViewReady = (timeout = 5000) => {
+  return new Promise((resolve, reject) => {
+    const startTime = Date.now();
+
+    const check = () => {
+      const rows = Array.from(
+        document.querySelectorAll("[role=main] [role=row]")
+      ).filter((node) => node.offsetParent);
+
+      if (rows.length > 0) {
+        resolve();
+        return;
+      }
+
+      if (Date.now() - startTime > timeout) {
+        reject(new Error("Timeout waiting for list view"));
+        return;
+      }
+
+      requestAnimationFrame(check);
+    };
+
+    check();
+  });
+};
+
+export { waitForGmailPageChangeOnce, waitForListViewReady };

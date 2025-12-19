@@ -1,11 +1,17 @@
 <style global>
-  @tailwind base;
-
   #unsubmarine {
     @apply font-sans;
+    box-sizing: border-box;
+    line-height: 1.5;
   }
 
-  a {
+  #unsubmarine *,
+  #unsubmarine *::before,
+  #unsubmarine *::after {
+    box-sizing: border-box;
+  }
+
+  #unsubmarine a {
     color: blue;
     text-decoration: underline;
   }

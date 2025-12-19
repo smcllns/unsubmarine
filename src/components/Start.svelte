@@ -1,6 +1,6 @@
 <script>
   import Dialog from "./Dialog.svelte";
-  import { waitForGmailPageChangeOnce } from "../lib/unsubmarine/observers";
+  import { waitForGmailPageChangeOnce, waitForListViewReady } from "../lib/unsubmarine/observers";
   import { start, hideUI } from "../actions";
 
   const handleStandardMode = (e) => {
@@ -25,6 +25,7 @@
     if (window.location.hash !== "#search/unsubscribe") {
       window.location.hash = "#search/unsubscribe";
       await waitForGmailPageChangeOnce();
+      await waitForListViewReady();
     }
   }
 
