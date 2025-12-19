@@ -1,9 +1,9 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Unsubmarine",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Bulk Unsubscribe in Gmail",
-  "homepage": "https://smcllns.com/unsubmarine?ref=crxwebstore",
+  "homepage_url": "https://smcllns.com/unsubmarine?ref=crxwebstore",
   "content_scripts": [
     {
       "matches": ["https://mail.google.com/*"],
@@ -12,17 +12,22 @@
     }
   ],
   "background": {
-    "scripts": ["background/bg.js", "background/hot-reload.js"]
+    "service_worker": "background/service-worker.js"
   },
   "web_accessible_resources": [
-    "background/*.js",
-    "content/bundle.*",
-    "images/*.png"
+    {
+      "resources": ["content/bundle.*", "images/*.png"],
+      "matches": ["https://mail.google.com/*"]
+    }
   ],
-  "permissions": ["declarativeContent"],
-  "page_action": {
+  "permissions": ["tabs"],
+  "host_permissions": ["https://mail.google.com/*"],
+  "action": {
     "default_title": "Run Unsubmarine in Gmail",
-    "default_icon": { "16": "images/icon16.png", "32": "images/icon32.png" }
+    "default_icon": {
+      "16": "images/icon16.png",
+      "32": "images/icon32.png"
+    }
   },
   "icons": {
     "16": "images/icon16.png",
